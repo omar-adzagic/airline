@@ -4,7 +4,6 @@ import com.specialist.exam.airline.model.Promotion;
 import com.specialist.exam.airline.repository.PromotionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.transaction.Transactional;
 import java.util.List;

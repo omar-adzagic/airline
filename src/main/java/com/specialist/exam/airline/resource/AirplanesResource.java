@@ -1,10 +1,8 @@
 package com.specialist.exam.airline.resource;
 
 import com.specialist.exam.airline.model.Airplane;
-import com.specialist.exam.airline.repository.AirplanesRepository;
 import com.specialist.exam.airline.services.AirplanesService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

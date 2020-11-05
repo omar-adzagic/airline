@@ -3,14 +3,12 @@ package com.specialist.exam.airline;
 import com.specialist.exam.airline.filters.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -56,11 +54,10 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/api/activate").permitAll()
 //                .antMatchers("/api/account/reset-password/init").permitAll()
 //                .antMatchers("/api/account/reset-password/finish").permitAll()
-                .antMatchers("/").permitAll()
-                .antMatchers("/airplanes").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/authenticate").permitAll()
-                // .antMatchers("/api/**").authenticated()
+                .antMatchers("/api/authenticate").permitAll()
+                .antMatchers("/api/register").permitAll()
+                .antMatchers("/api/promos").permitAll()
+                .antMatchers("/api/**").authenticated()
 //                .antMatchers("/management/health").permitAll()
 //                .antMatchers("/management/info").permitAll()
 //                .antMatchers("/management/prometheus").permitAll()

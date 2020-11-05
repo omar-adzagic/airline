@@ -3,7 +3,6 @@ package com.specialist.exam.airline.model;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;

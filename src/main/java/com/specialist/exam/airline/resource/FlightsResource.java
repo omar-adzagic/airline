@@ -1,16 +1,13 @@
 package com.specialist.exam.airline.resource;
 
-import com.specialist.exam.airline.model.Airplane;
 import com.specialist.exam.airline.model.Flight;
-import com.specialist.exam.airline.repository.FlightsRepository;
 import com.specialist.exam.airline.services.FlightsService;
+import com.specialist.exam.airline.services.dto.FlightsScreenDTO;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 @RestController
@@ -20,7 +17,7 @@ public class FlightsResource {
     private FlightsService flightsService;
 
     @GetMapping("/flights")
-    public Map<String, List> getFlights() {
+    public FlightsScreenDTO getFlights() {
         return this.flightsService.getFlights();
     }
 

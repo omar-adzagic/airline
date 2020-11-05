@@ -2,27 +2,27 @@ package com.specialist.exam.airline.services;
 
 import com.specialist.exam.airline.model.Flight;
 import com.specialist.exam.airline.repository.FlightsRepository;
+import com.specialist.exam.airline.services.dto.FlightsScreenDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.List;
 
 @Service
 public class FlightsService {
     @Autowired
     FlightsRepository flightsRepository;
 
-    public Map<String, List> getFlights() {
+    public FlightsScreenDTO getFlights() {
         List<Flight> flights = this.flightsRepository.findAll();
-        List citiesFrom = this.flightsRepository.citiesFrom();
-        List citiesTo = this.flightsRepository.citiesTo();
-        Map<String, List> map = new HashMap<String, List>();
-        map.put("flights", flights);
-        map.put("citiesFrom", citiesFrom);
-        map.put("citiesTo", citiesTo);
-        return map;
+        List<String> citiesFrom = this.flightsRepository.citiesFrom();
+        List<String> citiesTo = this.flightsRepository.citiesTo();
+        FlightsScreenDTO flightsScreenDTO = new FlightsScreenDTO();
+        flightsScreenDTO.setFlights(flights);
+        flightsScreenDTO.setCitiesFrom(citiesFrom);
+        flightsScreenDTO.setCitiesTo(citiesTo);
+        return flightsScreenDTO;
     }
 
     public void storeFlight(Flight flight) {

@@ -3,11 +3,11 @@ import axios from 'axios';
 class AirplanesService {
    getAirplanes() {
       const jwtToken = localStorage.getItem('jwtToken');
-      console.log(jwtToken);
       const requestHeaders = {
-         'Authorization': `Bearer ${jwtToken}`
+         headers: {
+            'Authorization': `Bearer ${jwtToken}`
+         }
       };
-      console.log(requestHeaders);
       const restApiUrl = `http://localhost:8080/api/airplanes`;
       return axios.get(restApiUrl, requestHeaders);
    }

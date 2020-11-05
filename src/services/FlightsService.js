@@ -2,8 +2,14 @@ import axios from 'axios';
 
 class FlightsService {
    getData() {
+      const jwtToken = localStorage.getItem('jwtToken');
+      const requestHeaders = {
+         headers: {
+            'Authorization': `Bearer ${jwtToken}`
+         }
+      };
       const restApiUrl = `http://localhost:8080/api/flights`;
-      return axios.get(restApiUrl);
+      return axios.get(restApiUrl, requestHeaders);
    }
 
    storeFlight(data) {

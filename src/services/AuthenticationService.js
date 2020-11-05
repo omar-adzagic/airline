@@ -6,7 +6,7 @@ class AuthenticationService {
          username: username,
          password: password
       };
-      const restApiUrl = `http://localhost:8080/authenticate`;
+      const restApiUrl = `http://localhost:8080/api/authenticate`;
       return axios.post(restApiUrl, requestBody);
    }
 }

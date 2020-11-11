@@ -2,8 +2,14 @@ import axios from 'axios';
 
 class PromotionsService {
    getPromotions() {
+      const jwtToken = localStorage.getItem('jwtToken');
+      const requestHeaders = {
+         headers: {
+            'Authorization': `Bearer ${jwtToken}`
+         }
+      };
       const restApiUrl = `http://localhost:8080/api/promotions`;
-      return axios.get(restApiUrl);
+      return axios.get(restApiUrl, requestHeaders);
    }
 
    storePromotion(data) {

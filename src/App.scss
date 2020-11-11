@@ -13,29 +13,33 @@ table {
    font-size: 0px;
    margin-bottom: 0px;
    float: right;
+   display: flex;
+   height: 100%;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
 }
 
 .navigationdiv {
    background-color: #000;
-   color: #fff;
    height: 53px;
 }
 .navigation li {
-   padding: 14px;
    display: inline-block;
 }
 
 .navigation li a {
-   font-size: 1.1rem;
+   font-size: 1rem;
+   padding: 1rem;
    color: #fff;
    text-decoration: none;
+   border-top-left-radius: 0.33rem;
+   border-top-right-radius: 0.33rem;
+   transition: background-color 0.2ms ease-in-out;
 }
 
-.navigation li:hover {
+.navigation li a:hover {
    background-color: #fff;
-}
-
-.navigation li:hover > a {
    color: #000;
 }
 
@@ -188,12 +192,15 @@ input:disabled#addFlightBtn {
 }
 
 #prices{
-   padding: 20px;
-   padding-top: 10px;
-   margin-top: 20px;
-   border: 1px solid grey;
-   box-shadow: 0px 0px 1px 1px grey;
-   padding-bottom: 5px;
+   padding: 10px 20px 5px 20px;
+   margin: 2rem auto;
+   border: 1px solid #777;
+   border-radius: 0.5rem;
+   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+               rgba(0, 0, 0, 0.12) 0px -12px 30px,
+               rgba(0, 0, 0, 0.12) 0px 4px 6px,
+               rgba(0, 0, 0, 0.17) 0px 12px 13px,
+               rgba(0, 0, 0, 0.09) 0px -3px 5px;
    opacity: 0.9;
    font-weight: bold;
 }
@@ -276,4 +283,9 @@ input:disabled#addFlightBtn {
       padding: 1.75rem 3rem;
       border-radius: 0.5rem;
    }
+}
+
+.navigation li .active {
+   background-color: #fff;
+   color: black;
 }

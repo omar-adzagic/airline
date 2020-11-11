@@ -8,6 +8,10 @@ class AuthenticationService {
       };
       const restApiUrl = `http://localhost:8080/api/authenticate`;
       return axios.post(restApiUrl, requestBody);
+   };
+   getAuthenticatedUser() {
+      const restApiUrl = `http://localhost:8080/api/get-authenticated-user`;
+      return axios.get(restApiUrl);
    }
 }
 

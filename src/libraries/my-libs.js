@@ -1,5 +1,8 @@
 import moment from 'moment'
 
+export const checkIfNotEmpty = (value) => value !== null && value !== undefined && value !== '';
+export const checkIfEmpty = (value) => !checkIfNotEmpty(value);
+
 // Moment.js
 export const convertToMysqlDateFormat = stringDate => {
    const dateMomentObject = moment(stringDate, "DD/MM/YYYY");

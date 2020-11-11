@@ -1,30 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import '../styles/home.scss';
 import AuthenticationService from "../services/AuthenticationService";
+import { useHistory, useLocation } from "react-router";
 
-function LoginComponent() {
+const LoginComponent = (props) => {
+   const [jwt, setJwt] = useState('');
    const [username, setUsername] = useState('');
    const [password, setPassword] = useState('');
-   const [jwt, setJwt] = useState('');
 
-   const authenticate = event => {
+   function authenticate(event) {
       event.preventDefault();
-      AuthenticationService.authenticate(username, password).then(response => {
-         localStorage.setItem('jwtToken', response.data.jwt);
-      }).catch(error => {
-         if (error.response.data.status == 401) {
-
-         }
-      });
-   };
+      props.authenticate(username, password);
+   }
 
    useEffect(() => {
-
+      console.log(props);
    }, []);
 
    return (
       <div className="login-page-container">
-         <form action="" onSubmit={authenticate}>
+         <form action="" onSubmit={event => authenticate(event)}>
             <div className="form-group">
                <label htmlFor="username">Korisničko ime *</label>
                <input className="form-control"
@@ -45,6 +40,6 @@ function LoginComponent() {
          </form>
       </div>
    );
-}
+};
 
 export default LoginComponent;

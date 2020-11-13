@@ -1,6 +1,6 @@
 package com.specialist.exam.airline.repository;
 
-import com.specialist.exam.airline.model.Flight;
+import com.specialist.exam.airline.domain.Flight;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

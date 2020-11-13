@@ -1,7 +1,7 @@
-package com.specialist.exam.airline.filters;
+package com.specialist.exam.airline.security.filters;
 
-import com.specialist.exam.airline.JwtUtil;
-import com.specialist.exam.airline.MyUserDetailsService;
+import com.specialist.exam.airline.security.JwtUtil;
+import com.specialist.exam.airline.security.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

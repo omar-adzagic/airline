@@ -1,4 +1,4 @@
-package com.specialist.exam.airline.model;
+package com.specialist.exam.airline.domain;
 
 import javax.persistence.*;
 

@@ -1,8 +1,8 @@
-package com.specialist.exam.airline.resource;
+package com.specialist.exam.airline.web.rest;
 
-import com.specialist.exam.airline.model.Flight;
-import com.specialist.exam.airline.services.FlightsService;
-import com.specialist.exam.airline.services.dto.FlightsScreenDTO;
+import com.specialist.exam.airline.domain.Flight;
+import com.specialist.exam.airline.service.FlightsService;
+import com.specialist.exam.airline.service.dto.FlightsScreenDTO;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

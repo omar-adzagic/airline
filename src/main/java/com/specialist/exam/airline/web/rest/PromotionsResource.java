@@ -1,10 +1,10 @@
-package com.specialist.exam.airline.resource;
+package com.specialist.exam.airline.web.rest;
 
-import com.specialist.exam.airline.model.Flight;
-import com.specialist.exam.airline.model.Promotion;
+import com.specialist.exam.airline.domain.Flight;
+import com.specialist.exam.airline.domain.Promotion;
 import com.specialist.exam.airline.repository.FlightsRepository;
 import com.specialist.exam.airline.repository.PromotionsRepository;
-import com.specialist.exam.airline.services.PromotionsService;
+import com.specialist.exam.airline.service.PromotionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

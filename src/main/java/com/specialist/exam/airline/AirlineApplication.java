@@ -1,10 +1,10 @@
 package com.specialist.exam.airline;
 
-import com.specialist.exam.airline.model.*;
+import com.specialist.exam.airline.domain.*;
 import com.specialist.exam.airline.repository.*;
-import com.specialist.exam.airline.services.FlightsService;
-import com.specialist.exam.airline.services.PromotionsService;
-import com.specialist.exam.airline.services.ReservationsService;
+import com.specialist.exam.airline.service.FlightsService;
+import com.specialist.exam.airline.service.PromotionsService;
+import com.specialist.exam.airline.service.ReservationsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -27,6 +27,8 @@ public class AirlineApplication implements CommandLineRunner {
     }
 
     @Autowired
+    private RolesRepository rolesRepository;
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private AirplanesRepository airplanesRepository;
@@ -45,22 +47,32 @@ public class AirlineApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        this.reservationsService.deleteAll();
-        this.reservationsRepository.flush();
+//        this.reservationsService.deleteAll();
+//        this.reservationsRepository.flush();
         this.promotionsService.deleteAll();
         this.promotionsRepository.flush();
         this.flightsService.deleteAll();
+        this.flightsRepository.flush();
+        this.rolesRepository.deleteAll();
+        this.rolesRepository.flush();
         this.userRepository.deleteAll();
         this.userRepository.flush();
         this.airplanesRepository.deleteAll();
         this.airplanesRepository.flush();
 
-        User Zvonko = new User("Zvonko", "Bogdan", "zvonko@email.com", "zvonja", "12345678", true, "USER, ADMIN");
-        this.userRepository.save(Zvonko);
-        User Marko = new User("Marko", "Marković", "marko@email.com", "masja", "12345678", false, "USER, ADMIN");
-        this.userRepository.save(Marko);
-        User Ivan = new User("Ivan", "Ivanović", "ivan@email.com", "ivo", "12345678", true, "USER, ADMIN");
-        this.userRepository.save(Ivan);
+        Role admin = new Role("ADMIN");
+        this.rolesRepository.save(admin);
+        Role user = new Role("USER");
+        this.rolesRepository.save(user);
+
+        User test = new User("test ime", "test prezime", "test@email.com", "Test", "12345678", true, admin);
+        this.userRepository.save(test);
+        User zvonko = new User("Zvonko", "Bogdan", "zvonko@email.com", "zvonja", "12345678", true, admin);
+        this.userRepository.save(zvonko);
+        User marko = new User("Marko", "Marković", "marko@email.com", "masja", "12345678", false, user);
+        this.userRepository.save(marko);
+        User ivan = new User("Ivan", "Ivanović", "ivan@email.com", "ivo", "12345678", true, user);
+        this.userRepository.save(ivan);
 
         Airplane boeing737 = new Airplane("Boeing 737", 150, 2003, true);
         this.airplanesRepository.save(boeing737);
@@ -77,17 +89,37 @@ public class AirlineApplication implements CommandLineRunner {
         this.flightsRepository.save(flight2);
         Flight flight3 = new Flight(LocalDate.now().plusDays(20), LocalDate.now().plusDays(30), "Beograd", "Frankfurt", Instant.now().plus(Duration.ofDays(10)), Instant.now().plus(Duration.ofDays(6)), 65, true, airbusa320);
         this.flightsRepository.save(flight3);
+        Flight flight4 = new Flight(LocalDate.now().plusDays(18), LocalDate.now().plusDays(28), "Beograd", "Berlin", Instant.now().plus(Duration.ofDays(12)), Instant.now().plus(Duration.ofDays(8)), 85, true, boeing737);
+        this.flightsRepository.save(flight4);
 
         Promotion promotion1 = new Promotion(flight1);
         this.promotionsRepository.save(promotion1);
         Promotion promotion2 = new Promotion(flight3);
         this.promotionsRepository.save(promotion2);
+        Promotion promotion3 = new Promotion(flight4);
+        this.promotionsRepository.save(promotion3);
+        Promotion promotion4 = new Promotion(flight3);
+        this.promotionsRepository.save(promotion4);
+        Promotion promotion5 = new Promotion(flight1);
+        this.promotionsRepository.save(promotion5);
+        Promotion promotion6 = new Promotion(flight3);
+        this.promotionsRepository.save(promotion6);
+        Promotion promotion7 = new Promotion(flight4);
+        this.promotionsRepository.save(promotion7);
+        Promotion promotion8 = new Promotion(flight3);
+        this.promotionsRepository.save(promotion8);
+        Promotion promotion9 = new Promotion(flight1);
+        this.promotionsRepository.save(promotion9);
+        Promotion promotion10 = new Promotion(flight4);
+        this.promotionsRepository.save(promotion10);
+        Promotion promotion11 = new Promotion(flight3);
+        this.promotionsRepository.save(promotion11);
 
-        Reservation reservation1 = new Reservation("S", Instant.now().plus(Duration.ofDays(2)), Zvonko, flight1);
+        Reservation reservation1 = new Reservation("S", Instant.now().plus(Duration.ofDays(2)), zvonko, flight1);
         this.reservationsRepository.save(reservation1);
-        Reservation reservation2 = new Reservation("A", Instant.now().plus(Duration.ofDays(4)), Marko, flight2);
+        Reservation reservation2 = new Reservation("A", Instant.now().plus(Duration.ofDays(4)), marko, flight2);
         this.reservationsRepository.save(reservation2);
-        Reservation reservation3 = new Reservation("S", Instant.now().plus(Duration.ofDays(5)), Ivan, flight3);
+        Reservation reservation3 = new Reservation("S", Instant.now().plus(Duration.ofDays(5)), ivan, flight3);
         this.reservationsRepository.save(reservation3);
     }
 

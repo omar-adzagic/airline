@@ -1,8 +1,8 @@
-package com.specialist.exam.airline.services;
+package com.specialist.exam.airline.service;
 
-import com.specialist.exam.airline.model.Flight;
+import com.specialist.exam.airline.domain.Flight;
 import com.specialist.exam.airline.repository.FlightsRepository;
-import com.specialist.exam.airline.services.dto.FlightsScreenDTO;
+import com.specialist.exam.airline.service.dto.FlightsScreenDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

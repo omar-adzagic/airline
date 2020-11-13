@@ -1,7 +1,7 @@
-package com.specialist.exam.airline.resource;
+package com.specialist.exam.airline.web.rest;
 
-import com.specialist.exam.airline.model.Reservation;
-import com.specialist.exam.airline.services.ReservationsService;
+import com.specialist.exam.airline.domain.Reservation;
+import com.specialist.exam.airline.service.ReservationsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

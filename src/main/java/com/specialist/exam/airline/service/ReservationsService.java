@@ -1,6 +1,6 @@
-package com.specialist.exam.airline.services;
+package com.specialist.exam.airline.service;
 
-import com.specialist.exam.airline.model.Reservation;
+import com.specialist.exam.airline.domain.Reservation;
 import com.specialist.exam.airline.repository.ReservationsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

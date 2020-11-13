@@ -1,11 +1,15 @@
-package com.specialist.exam.airline.model;
+package com.specialist.exam.airline.domain;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -21,24 +25,26 @@ public class User {
     private String password;
     @Column(name = "active")
     private boolean active;
-    @Column(name = "roles")
-    private String roles;
 
     // Relationships
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
     @OneToMany(mappedBy = "user")
     private List<Reservation> reservations;
 
-    public User(String firstName, String lastName, String email, String userName, String password, boolean active, String roles) {
+    public User(String firstName, String lastName, String email, String userName, String password, boolean active, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.userName = userName;
         this.password = password;
         this.active = active;
-        this.roles = roles;
+        this.role = role;
     }
 
-    public User() {}
+    public User() {
+    }
 
     public Long getId() {
         return id;
@@ -96,11 +102,41 @@ public class User {
         this.active = active;
     }
 
-    public String getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(String roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(role);
+    }
+
+    @Override
+    public String getUsername() {
+        return userName;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return active;
     }
 }

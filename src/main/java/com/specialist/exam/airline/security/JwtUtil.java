@@ -1,4 +1,4 @@
-package com.specialist.exam.airline;
+package com.specialist.exam.airline.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -39,9 +39,9 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+        return createToken(claims, username);
     }
 
     public String createToken(Map<String, Object> claims, String subject) {

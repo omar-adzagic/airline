@@ -1,6 +1,6 @@
-package com.specialist.exam.airline.services.dto;
+package com.specialist.exam.airline.service.dto;
 
-import com.specialist.exam.airline.model.Flight;
+import com.specialist.exam.airline.domain.Flight;
 
 import java.util.List;
 

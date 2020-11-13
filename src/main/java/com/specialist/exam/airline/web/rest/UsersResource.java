@@ -1,6 +1,6 @@
-package com.specialist.exam.airline.resource;
+package com.specialist.exam.airline.web.rest;
 
-import com.specialist.exam.airline.model.User;
+import com.specialist.exam.airline.domain.User;
 import com.specialist.exam.airline.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,5 +19,10 @@ public class UsersResource {
     @GetMapping("/users")
     protected List<User> getUsers() {
         return this.userRepository.findAll();
+    }
+
+    @GetMapping("/get-authenticated-user")
+    protected User getAuthenticatedUser() {
+        return null;
     }
 }

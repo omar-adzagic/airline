@@ -1,7 +1,7 @@
-package com.specialist.exam.airline.resource;
+package com.specialist.exam.airline.web.rest;
 
-import com.specialist.exam.airline.model.Airplane;
-import com.specialist.exam.airline.services.AirplanesService;
+import com.specialist.exam.airline.domain.Airplane;
+import com.specialist.exam.airline.service.AirplanesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

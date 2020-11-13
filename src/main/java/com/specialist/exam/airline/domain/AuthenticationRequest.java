@@ -1,4 +1,4 @@
-package com.specialist.exam.airline.model;
+package com.specialist.exam.airline.domain;
 
 public class AuthenticationRequest {
     private String username;

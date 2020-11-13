@@ -1,6 +1,6 @@
-package com.specialist.exam.airline.services;
+package com.specialist.exam.airline.service;
 
-import com.specialist.exam.airline.model.Promotion;
+import com.specialist.exam.airline.domain.Promotion;
 import com.specialist.exam.airline.repository.PromotionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

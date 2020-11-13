@@ -13,6 +13,8 @@ function HomeComponent() {
       backgroundImage: 'url(../images/bg2.jpg)'
    });
    const { value, setValue } = useContext(UserContext);
+   const firstName = value.firstName;
+   console.log(value);
 
    const imageSlider = () => {
       let currentIndex = 2;
@@ -68,7 +70,7 @@ function HomeComponent() {
             </div>
             <div className="row">
                <div className="" id="prices" style={{ backgroundColor: "white" }}>
-                  <h3 className="text-center">Promotivne cijene {value.firstName}</h3>
+                  <h3 className="text-center">Promotivne cijene</h3>
                   <div id="toreplace">
                      <table id="secondtable" className="table">
                         <thead>

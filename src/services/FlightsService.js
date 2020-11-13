@@ -1,11 +1,16 @@
 import axios from 'axios';
 
 class FlightsService {
+
+   constructor() {
+      this.jwtToken = localStorage.getItem('jwtToken');
+   }
+
    getData() {
       const jwtToken = localStorage.getItem('jwtToken');
       const requestHeaders = {
          headers: {
-            'Authorization': `Bearer ${jwtToken}`
+            'Authorization': `Bearer ${this.jwtToken}`
          }
       };
       const restApiUrl = `http://localhost:8080/api/flights`;
@@ -20,18 +25,24 @@ class FlightsService {
          data: data,
          headers: {
             Accept: 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.jwtToken}`
          },
       });
    }
 
    deleteFlight(id) {
+      const requestHeaders = {
+         headers: {
+            'Authorization': `Bearer ${this.jwtToken}`
+         }
+      };
       const restApiUrl = `http://localhost:8080/api/flights/${id}`;
-      return axios.delete(restApiUrl);
+      return axios.delete(restApiUrl, requestHeaders);
    }
 
    filterFlights(filters) {
-      console.log(filters);
+
       const restApiUrl = `http://localhost:8080/api/flights/filter`;
       return axios({
          method: 'POST',
@@ -39,7 +50,8 @@ class FlightsService {
          data: filters,
          headers: {
             Accept: 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.jwtToken}`
          },
       });
    }

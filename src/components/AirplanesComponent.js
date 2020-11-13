@@ -7,7 +7,7 @@ import { faTrashAlt, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 function AirplanesComponent() {
    const [show, setShow] = useState(false);
-   const [airplanes, setAirplanes] = useState([]);
+   const [airplanes, setAirplanes] = useState([{id: 1123123123}]);
    const [model, setModel] = useState('');
    const [capacity, setCapacity] = useState('');
    const [year, setYear] = useState('');
@@ -30,15 +30,23 @@ function AirplanesComponent() {
    const deleteAirplane = (event, id) => {
       event.preventDefault();
       AirplanesService.deleteAirplane(id).then(response => {
-         console.log('deleted');
+         getAirplanes();
+      });
+   };
+
+   const getAirplanes = () => {
+      AirplanesService.getAirplanes().then(response => {
+         setAirplanes(response.data);
       });
    };
 
    useEffect(() => {
-      AirplanesService.getAirplanes().then(response => {
-         setAirplanes(response.data);
-      });
+      getAirplanes();
    }, []);
+
+   useEffect(() => {
+
+   }, [airplanes]);
 
    return (
       <div className="page-container">

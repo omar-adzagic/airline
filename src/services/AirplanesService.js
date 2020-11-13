@@ -1,11 +1,16 @@
 import axios from 'axios';
 
 class AirplanesService {
+
+   constructor() {
+      this.jwtToken = localStorage.getItem('jwtToken');
+   }
+
    getAirplanes() {
-      const jwtToken = localStorage.getItem('jwtToken');
+      console.log('poz');
       const requestHeaders = {
          headers: {
-            'Authorization': `Bearer ${jwtToken}`
+            'Authorization': `Bearer ${this.jwtToken}`
          }
       };
       const restApiUrl = `http://localhost:8080/api/airplanes`;
@@ -20,14 +25,20 @@ class AirplanesService {
          data: data,
          headers: {
             Accept: 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.jwtToken}`
          },
       });
    }
 
    deleteAirplane(id) {
+      const requestHeaders = {
+         headers: {
+            'Authorization': `Bearer ${this.jwtToken}`
+         }
+      };
       const restApiUrl = `http://localhost:8080/api/airplanes/${id}`;
-      return axios.delete(restApiUrl);
+      return axios.delete(restApiUrl, requestHeaders);
    }
 }
 

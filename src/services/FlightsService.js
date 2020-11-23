@@ -7,13 +7,22 @@ class FlightsService {
    }
 
    getData() {
-      const jwtToken = localStorage.getItem('jwtToken');
       const requestHeaders = {
          headers: {
             'Authorization': `Bearer ${this.jwtToken}`
          }
       };
       const restApiUrl = `http://localhost:8080/api/flights`;
+      return axios.get(restApiUrl, requestHeaders);
+   }
+
+   getFlight(flightId) {
+      const requestHeaders = {
+         headers: {
+            'Authorization': `Bearer ${this.jwtToken}`
+         }
+      };
+      const restApiUrl = `http://localhost:8080/api/flights/${flightId}`;
       return axios.get(restApiUrl, requestHeaders);
    }
 
@@ -24,7 +33,7 @@ class FlightsService {
          url: restApiUrl,
          data: data,
          headers: {
-            Accept: 'application/json',
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${this.jwtToken}`
          },
@@ -42,14 +51,13 @@ class FlightsService {
    }
 
    filterFlights(filters) {
-
       const restApiUrl = `http://localhost:8080/api/flights/filter`;
       return axios({
          method: 'POST',
          url: restApiUrl,
          data: filters,
          headers: {
-            Accept: 'application/json',
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${this.jwtToken}`
          },

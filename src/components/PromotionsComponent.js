@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PromotionsService from "../services/PromotionsService";
-import { convertToDateTimeFormat } from "../libraries/my-libs";
+import {checkIfNotEmpty, convertToDateTimeFormat} from "../libraries/my-libs";
 import AirplaneCreate from "./AirplaneCreate";
 
 function PromotionsComponent() {
@@ -14,8 +14,12 @@ function PromotionsComponent() {
 
    const storePromotion = event => {
       event.preventDefault();
-      const flight = flights.find(flight => flight.id = flightId);
+      let flight = {};
+      if (checkIfNotEmpty(flightId)) {
+          flight = flights.find(flight => flight.id = flightId);
+      }
       flight.price = price;
+      flight.promoted = true;
       const data = {
          flight: flight,
          flightId: flightId
@@ -32,8 +36,8 @@ function PromotionsComponent() {
    }, []);
 
    return (
-      <div className="row">
-         <div className="col-xs-12 col-md-12">
+      <div className="promotions-container">
+         <div className="mt-3 mb-5">
             <h2 className="text-center">Stranica za upravljanje promotivnim cijenama</h2>
          </div>
          <div className="col-xs-12 col-md-8" id="reservationsbody">
@@ -51,12 +55,7 @@ function PromotionsComponent() {
                   </tr>
                </thead>
                <tbody>
-                  {/*<?php*/}
                   {/*$sql = "select f.city_from, f.city_to, f.price * 0.4 as price, f.flight_date from promos p, flights f where f.id = p.flight_id and f.flight_date >= now() and f.active = 1  order by p.id desc limit 12";*/}
-                  {/*$result = DB::select(DB::raw($sql));*/}
-                  {/*foreach($result as $row){*/}
-                  {/*$row = (array)$row;*/}
-                  {/*?>*/}
                   {promotions.map(promotion => {
                      return (
                         <tr key={ promotion.id }>
@@ -66,9 +65,6 @@ function PromotionsComponent() {
                         </tr>
                      )
                   })}
-                  {/*<?php*/}
-                  {/*}*/}
-                  {/*?>*/}
                </tbody>
             </table>
          </div>
@@ -80,12 +76,7 @@ function PromotionsComponent() {
                           className="form-control"
                           value={flightId}
                           onChange={event => setFlightId(event.target.value)}>
-                     {/*<?php*/}
                      {/*$sqlFlights = "select * from flights where active = 1 and city_from = 'Belgrade' and flight_date >= now()";*/}
-                     {/*$resultFlights = DB::select(DB::raw($sqlFlights));*/}
-                     {/*foreach($resultFlights as $rowFlights){*/}
-                     {/*$rowFlights = (array)$rowFlights;*/}
-                     {/*?>*/}
                      <option value="">Izaberite let</option>
                      {flights.map(flight => {
                         return (
@@ -94,8 +85,7 @@ function PromotionsComponent() {
                            </option>
                         )
                      })}
-                        {/*<?php echo $rowFlights['city_from'] . ' - ' . $rowFlights['city_to'] . ', ' . $rowFlights['flight_date'] . ', ' . $rowFlights['price'] * 0.4;?>&euro;*/}
-                     {/*<?php } ?>*/}
+                     {/*<?php echo $rowFlights['city_from'] . ' - ' . $rowFlights['city_to'] . ', ' . $rowFlights['flight_date'] . ', ' . $rowFlights['price'] * 0.4;?>&euro;*/}
                   </select>
                </div>
                <div className="form-group">

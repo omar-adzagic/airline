@@ -3,42 +3,154 @@ import '../styles/home.scss';
 import FlightsService from "../services/FlightsService";
 import AirplaneCreate from "./AirplaneCreate";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-import {convertToDateTimeFormat, convertToMysqlDateFormat} from "../libraries/my-libs";
+import { faTrashAlt, faPlusCircle, faEye } from '@fortawesome/free-solid-svg-icons';
+import {checkIfEmpty, checkIfNotEmpty, convertToDateTimeFormat, convertToMysqlDateFormat} from "../libraries/my-libs";
 import "flatpickr/dist/themes/material_green.css";
 import Flatpickr from "react-flatpickr";
+import ValidationErrorMessage from "./partials/ValidationErrorMessage";
 
 function FlightsComponent() {
    const [show, setShow] = useState(false);
    const [flights, setFlights] = useState([]);
+   const [airplanes, setAirplanes] = useState([]);
    const [citiesFrom, setCitiesFrom] = useState([]);
    const [citiesTo, setCitiesTo] = useState([]);
    const [cityFrom, setCityFrom] = useState('');
    const [cityTo, setCityTo] = useState('');
    const [flightDate, setFlightDate] = useState('');
    const [boardingTime, setBoardingTime] = useState('');
-   const [returnTicket, setReturnTicket] = useState('');
+   const [returnTicket, setReturnTicket] = useState(false);
    const [returnDate, setReturnDate] = useState('');
    const [boardingTimeReturn, setBoardingTimeReturn] = useState('');
    const [price, setPrice] = useState('');
+   const [airplaneId, setAirplaneId] = useState('');
    const [citiesFromFilter, setCitiesFromFilter] = useState('');
-   let [citiesToFilter, setCitiesToFilter] = useState('');
+   const [citiesToFilter, setCitiesToFilter] = useState('');
+   const [errorsCityFrom, setErrorsCityFrom] = useState('');
+   const [errorsCityFromPresent, setErrorsCityFromPresent] = useState(false);
+   const [errorsCityTo, setErrorsCityTo] = useState('');
+   const [errorsCityToPresent, setErrorsCityToPresent] = useState(false);
+   const [errorsFlightDate, setErrorsFlightDate] = useState('');
+   const [errorsFlightDatePresent, setErrorsFlightDatePresent] = useState(false);
+   const [errorsBoardingTime, setErrorsBoardingTime] = useState('');
+   const [errorsBoardingTimePresent, setErrorsBoardingTimePresent] = useState(false);
+   const [errorsReturnDate, setErrorsReturnDate] = useState('');
+   const [errorsReturnDatePresent, setErrorsReturnDatePresent] = useState(false);
+   const [errorsBoardingTimeReturn, setErrorsBoardingTimeReturn] = useState('');
+   const [errorsBoardingTimeReturnPresent, setErrorsBoardingTimeReturnPresent] = useState(false);
+   const [errorsPrice, setErrorsPrice] = useState('');
+   const [errorsPricePresent, setErrorsPricePresent] = useState(false);
+   const [errorsAirplane, setErrorsAirplane] = useState('');
+   const [errorsAirplanePresent, setErrorsAirplanePresent] = useState(false);
+
+   const ReturnTicketHtml = props => {
+      return (
+          <div>
+             <div className="form-group">
+                <label htmlFor="returnDate">Datum povratka</label>
+                <Flatpickr id="returnDate"
+                           className={`form-control ${errorsReturnDatePresent ? "border border-danger" : ""}`}
+                           value={returnDate}
+                           onChange={date => setReturnDate(date)}/>
+                <ValidationErrorMessage errorMessage={errorsReturnDate}/>
+             </div>
+             <div className="form-group">
+                <label htmlFor="boardingTimeReturn">Povratno vrijeme ukrcavanja</label>
+                <Flatpickr id="boardingTimeReturn"
+                           className={`form-control ${errorsBoardingTimeReturnPresent ? "border border-danger" : ""}`}
+                           data-enable-time
+                           value={boardingTimeReturn}
+                           options={{
+                              enableTime: true,
+                              noCalendar: true,
+                              dateFormat: "H:i",
+                              time_24hr: true
+                           }}
+                           onChange={date => setBoardingTimeReturn(date)} />
+                <ValidationErrorMessage errorMessage={errorsBoardingTimeReturn} />
+             </div>
+          </div>
+      );
+   };
 
    const showModal = event => setShow(!show);
 
+   const resetValidationErrors = () => {
+      setErrorsCityFrom('');
+      setErrorsCityFromPresent(false);
+      setErrorsCityTo('');
+      setErrorsCityToPresent(false);
+      setErrorsFlightDate('');
+      setErrorsFlightDatePresent(false);
+      setErrorsBoardingTime('');
+      setErrorsBoardingTimePresent(false);
+      setErrorsReturnDate('');
+      setErrorsReturnDatePresent(false);
+      setErrorsBoardingTimeReturn('');
+      setErrorsBoardingTimeReturnPresent(false);
+      setErrorsPrice('');
+      setErrorsPricePresent(false);
+      setErrorsAirplane('');
+      setErrorsAirplanePresent(false);
+   };
+
    const storeFlight = event => {
       event.preventDefault();
+      resetValidationErrors();
       const data = {
          cityFrom: cityFrom,
          cityTo: cityTo,
          flightDate: flightDate[0],
          boardingTime: boardingTime[0],
-         returnDate: returnDate,
-         boardingTimeReturn: boardingTimeReturn,
+         returnDate: returnDate[0],
+         boardingTimeReturn: boardingTimeReturn[0],
          price: price,
+         active: true,
+         promoted: false,
       };
+      if (checkIfNotEmpty(airplaneId)) {
+         data.airplane = {
+            id: airplaneId
+         }
+      }
       FlightsService.storeFlight(data).then(response => {
+         console.log(response);
          showModal();
+      }).catch(error => {
+         if (error.response.data.status == 400) {
+            error.response.data.errors.forEach(errorMessage => {
+               switch (errorMessage.field) {
+                  case "boardingTime":
+                     setErrorsBoardingTime(errorMessage.defaultMessage);
+                     setErrorsBoardingTimePresent(true);
+                     break;
+                  case "price":
+                     setErrorsPrice(errorMessage.defaultMessage);
+                     setErrorsPricePresent(true);
+                     break;
+                  case "cityFrom":
+                     setErrorsCityFrom(errorMessage.defaultMessage);
+                     setErrorsCityFromPresent(true);
+                     break;
+                  case "cityTo":
+                     setErrorsCityTo(errorMessage.defaultMessage);
+                     setErrorsCityToPresent(true);
+                     break;
+                  case "flightDate":
+                     setErrorsFlightDate(errorMessage.defaultMessage);
+                     setErrorsFlightDatePresent(true);
+                     break;
+                  case "boardingTimeReturn":
+                     setErrorsBoardingTimeReturn(errorMessage.defaultMessage);
+                     setErrorsBoardingTimeReturnPresent(true);
+                     break;
+                  case "airplane":
+                     setErrorsAirplane(errorMessage.defaultMessage);
+                     setErrorsAirplanePresent(true);
+                     break;
+               }
+            })
+         }
       });
    };
 
@@ -49,70 +161,116 @@ function FlightsComponent() {
       });
    };
 
-   const filterFlights = event => {
+   const setAirplaneIdValue = event => {
+      setAirplaneId(event.target.value);
+   };
+
+   const filterCityFromFlights = event => {
       setCitiesFromFilter(event.target.value);
-      console.log(citiesFromFilter);
-      const filters = {
-         citiesFromFilter: citiesFromFilter,
-         citiesToFilter: citiesToFilter
-      };
-      FlightsService.filterFlights(filters)
+      if (checkIfEmpty(event.target.value) && checkIfEmpty(citiesToFilter)) {
+         FlightsService.getData().then(response => {
+            setFlights(response.data.flights);
+            setCitiesFrom(response.data.citiesFrom);
+            setCitiesTo(response.data.citiesTo);
+         });
+      } else {
+         const filters = {
+            citiesFromFilter: event.target.value,
+            citiesToFilter: citiesToFilter
+         };
+         FlightsService.filterFlights(filters).then(response => {
+            setFlights(response.data);
+         });
+      }
+   };
+
+   const filterCityToFlights = event => {
+      setCitiesToFilter(event.target.value);
+      if (checkIfEmpty(event.target.value) && checkIfEmpty(citiesFromFilter)) {
+         FlightsService.getData().then(response => {
+            setFlights(response.data.flights);
+            setCitiesFrom(response.data.citiesFrom);
+            setCitiesTo(response.data.citiesTo);
+         });
+      } else {
+         const filters = {
+            citiesFromFilter: citiesFromFilter,
+            citiesToFilter: event.target.value
+         };
+         FlightsService.filterFlights(filters).then(response => {
+            setFlights(response.data);
+         });
+      }
+   };
+
+   const handleReturnTicket = (event) => {
+      setReturnTicket(event.target.checked);
+      setReturnDate('');
+      setBoardingTimeReturn('');
    };
 
    useEffect(() => {
       FlightsService.getData().then(response => {
          setFlights(response.data.flights);
+         setAirplanes(response.data.airplanes);
          setCitiesFrom(response.data.citiesFrom);
          setCitiesTo(response.data.citiesTo);
       });
    }, []);
 
+   useEffect(() => {
+   }, [returnTicket]);
+   useEffect(() => {
+      FlightsService.getData().then(response => {
+         // setFlights(response.data.flights);
+      });
+   }, [flights]);
+
    return (
       <div className="page-container">
-         <div className="col-xs-12 col-md-12">
+         <div className="mt-3 mb-5">
             <h2 className="text-center">Stranica za upravljanje letovima</h2>
          </div>
          <div id="flightsbody">
             <div className="page-actions">
-               {/*<form id="filter">*/}
-                  <div className="filters">
-                     <div className="filter">
-                        <label htmlFor="citiesFrom">Mjesto polaska:</label>
-                        <select id="citiesFrom"
-                                className="form-control"
-                                value={citiesFromFilter}
-                                onChange={filterFlights}>
-                           <option>Svi</option>
-                           {citiesFrom.map(cityFrom => {
-                              return (
-                                 <option value={cityFrom} key={cityFrom}>{cityFrom}</option>
-                              )
-                           })}
-                        </select>
-                     </div>
-                     <div className="filter">
-                        <label htmlFor="citiesTo">Destinacija:</label>
-                        <select id="citiesTo" className="form-control">
-                           <option>Svi</option>
-                           {citiesTo.map(cityTo => {
-                              return (
-                                 <option value={cityTo} key={cityTo}>{cityTo}</option>
-                              )
-                           })}
-                        </select>
-                     </div>
-                     {/*<div className="filter">*/}
-                     {/*   <button type="submit" className='btn btn-primary form-control'>*/}
-                     {/*      Pretraži*/}
-                     {/*   </button>*/}
-                     {/*</div>*/}
+               <div className="actions">
+                  <button id="centered-toggle-button"
+                          className="btn btn-primary toggle-button"
+                          type="button"
+                          style={{ whiteSpace: "nowrap" }}
+                          onClick={ event => showModal()}>
+                     Zakaži let
+                  </button>
+               </div>
+               <div className="filters">
+                  <div className="filter">
+                     <label htmlFor="citiesFrom">Mjesto polaska:</label>
+                     <select id="citiesFrom"
+                             className="form-control"
+                             value={citiesFromFilter}
+                             onChange={filterCityFromFlights}>
+                        <option value="">Svi</option>
+                        {citiesFrom.map(cityFrom => {
+                           return (
+                              <option value={cityFrom} key={cityFrom}>{cityFrom}</option>
+                           )
+                        })}
+                     </select>
                   </div>
                   <div className="filter">
-                     <button id="centered-toggle-button" className="btn btn-primary toggle-button" type="button" onClick={ event => showModal()}>
-                        Zakaži let
-                     </button>
+                     <label htmlFor="citiesTo">Destinacija:</label>
+                     <select id="citiesTo"
+                             className="form-control"
+                             onChange={filterCityToFlights}>
+                        <option value="">Svi</option>
+                        {citiesTo.map(cityTo => {
+                           return (
+                              <option value={cityTo} key={cityTo}>{cityTo}</option>
+                           )
+                        })}
+                     </select>
                   </div>
-               {/*</form>*/}
+               </div>
             </div>
             <table className="table table-striped table-bordered" id="flightstable">
                <thead>
@@ -120,8 +278,8 @@ function FlightsComponent() {
                   <th>Mjesto polaska</th>
                   <th>Destinacija</th>
                   <th>Datum</th>
-                  <th>Boarding time</th>
-                  <th>Boarding (return)</th>
+                  <th>Vrijeme ukrcavanja</th>
+                  <th>Povratno vrijeme ukrcavanja</th>
                   <th>Osnovna cijena</th>
                   <th>Model aviona</th>
                   <th>Akcija</th>
@@ -129,12 +287,7 @@ function FlightsComponent() {
                </thead>
 
                <tbody>
-               {/*<?php*/}
                {/*$sql = "select f.id, f.city_from, f.return_date, f.boarding_time, f.flight_date, f.boarding_time_return, f.city_to, a.model, f.price from airplanes a, flights f where a.id = f.airplane_id and f.active = 1 and f.flight_date >= now() order by f.boarding_time desc";*/}
-               {/*$result = DB::select(DB::raw($sql));*/}
-               {/*foreach($result as $row){*/}
-               {/*$row = (array)$row;*/}
-               {/*?>*/}
                {flights.map((flight, i) => {
                   return (
                      <tr key={i}>
@@ -144,7 +297,7 @@ function FlightsComponent() {
                         <td>{ convertToDateTimeFormat(flight.boardingTime, 'DD/MM/YYYY') }</td>
                         <td>{ convertToDateTimeFormat(flight.boardingTimeReturn, 'DD/MM/YYYY') }</td>
                         <td>{ flight.price } &euro;</td>
-                        <td>Test model</td>
+                        <td>{ flight.airplane.model }</td>
                         <td>
                            <button type="button" className="btn btn-sm btn-danger" onClick={ event => deleteFlight(event, flight.id) }>
                               <FontAwesomeIcon icon={faTrashAlt} /> Izbriši
@@ -153,9 +306,6 @@ function FlightsComponent() {
                      </tr>
                   )
                })}
-               {/*<?php*/}
-               {/*}*/}
-               {/*?>*/}
                </tbody>
             </table>
          </div>
@@ -164,35 +314,33 @@ function FlightsComponent() {
                <div className="form-group">
                   <label htmlFor="cityFrom">Mjesto polaska</label>
                   <input type="text"
-                         className="form-control"
+                         className={`form-control ${errorsCityFromPresent ? "border border-danger" : ""}`}
                          id="cityFrom"
                          value={cityFrom}
                          onChange={event => setCityFrom(event.target.value)} />
+                  <ValidationErrorMessage errorMessage={errorsCityFrom} />
                </div>
                <div className="form-group">
                   <label htmlFor="cityTo">Destinacija</label>
                   <input type="text"
-                         className="form-control"
+                         className={`form-control ${errorsCityToPresent ? "border border-danger" : ""}`}
                          id="cityTo"
                          value={cityTo}
                          onChange={event => setCityTo(event.target.value)} />
+                  <ValidationErrorMessage errorMessage={errorsCityTo} />
                </div>
                <div className="form-group">
                   <label htmlFor="flightDate">Datum polaska</label>
                   <Flatpickr id="flightDate"
-                             className="form-control"
+                             className={`form-control ${errorsFlightDatePresent ? "border border-danger" : ""}`}
                              value={flightDate}
                              onChange={date => setFlightDate(date)} />
+                  <ValidationErrorMessage errorMessage={errorsFlightDate} />
                </div>
                <div className="form-group">
-                  <label htmlFor="boardingTime">Boarding time</label>
-                  {/*<input type="time"*/}
-                  {/*       className="form-control"*/}
-                  {/*       id="boardingTime"*/}
-                  {/*       value={boardingTime}*/}
-                  {/*       onChange={event => setBoardingTime(event.target.value)} />*/}
+                  <label htmlFor="boardingTime">Vrijeme ukrcavanja</label>
                   <Flatpickr id="boardingTime"
-                             className="form-control"
+                             className={`form-control ${errorsBoardingTimePresent ? "border border-danger" : ""}`}
                              data-enable-time
                              value={boardingTime}
                              options={{
@@ -202,58 +350,44 @@ function FlightsComponent() {
                                 time_24hr: true
                              }}
                              onChange={date => setBoardingTime(date)} />
+                  <ValidationErrorMessage errorMessage={errorsBoardingTime} />
                </div>
                <div className="checkbox">
                   <label>
                      <input type="checkbox"
                              id="returnTicket"
                              value={returnTicket}
-                             onChange={event => setReturnTicket(event.target.value)} />
-                             Povratna karta
+                             onChange={event => handleReturnTicket(event)} /> Povratna karta
                   </label>
                </div>
-               <div className="form-group">
-                  <label htmlFor="returnDate">Datum povratka</label>
-                  <input type="date"
-                         className="form-control"
-                         id="returnDate"
-                         disabled
-                         value={returnDate}
-                         onChange={event => setReturnDate(event.target.value)} />
-               </div>
-               <div className="form-group">
-                  <label htmlFor="boardingTimeReturn">Boarding time for return</label>
-                  <input type="time"
-                         className="form-control"
-                         id="boardingTimeReturn"
-                         disabled
-                         value={boardingTimeReturn}
-                         onChange={event => setBoardingTimeReturn(event.target.value)} />
-               </div>
+               { returnTicket === true ? <ReturnTicketHtml /> : '' }
                <div className="form-group">
                   <label htmlFor="price">Cijena</label>
                   <input id="price"
-                         className="form-control"
+                         className={`form-control ${errorsPricePresent ? "border border-danger" : ""}`}
                          type="number"
                          min="1"
                          value={price}
                          onChange={event => setPrice(event.target.value)} />
+                  <ValidationErrorMessage errorMessage={errorsPrice} />
                </div>
                <div className="form-group">
                   <label htmlFor="model">Model</label>
-                  <select className="form-control" id="model">
-                     {/*<?php*/}
+                  <select className={`form-control ${errorsAirplanePresent ? "border border-danger" : ""}`}
+                          id="model"
+                          value={airplaneId}
+                          onChange={setAirplaneIdValue}>>
                      {/*$sqlModels = "select a.id, a.model from airplanes a where a.active = 1;";*/}
-                     {/*$result = DB::select(DB::raw($sqlModels));*/}
-                     {/*foreach($result as $row){*/}
-                     {/*$row = (array)$row;*/}
-                     {/*?>*/}
-                     <option id=""></option>
-                     {/*<?php*/}
-                     {/*}*/}
-                     {/*?>*/}
-                     {/*}*/}
+                     <option value="">Izaberite avion</option>
+                     {airplanes.map(airplane => {
+                        return (
+                            <option key={airplane.id} value={airplane.id}>
+                               {airplane.model}
+                            </option>
+                        );
+                     })}
                   </select>
+                  <ValidationErrorMessage errorMessage={errorsAirplane} />
                </div>
                <button type="submit" className="btn btn-primary form-control" id="addFlightBtn">
                   Zakaži

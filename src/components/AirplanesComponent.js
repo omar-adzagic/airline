@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../styles/home.scss';
 import AirplanesService from "../services/AirplanesService";
 import AirplaneCreate from "./AirplaneCreate";
+import ValidationErrorMessage from "./partials/ValidationErrorMessage";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
@@ -11,11 +12,27 @@ function AirplanesComponent() {
    const [model, setModel] = useState('');
    const [capacity, setCapacity] = useState('');
    const [year, setYear] = useState('');
+   const [errorsModel, setErrorsModel] = useState('');
+   const [errorsModelPresent, setErrorsModelPresent] = useState(false);
+   const [errorsCapacity, setErrorsCapacity] = useState('');
+   const [errorsCapacityPresent, setErrorsCapacityPresent] = useState(false);
+   const [errorsYear, setErrorsYear] = useState('');
+   const [errorsYearPresent, setErrorsYearPresent] = useState(false);
 
    const showModal = event => setShow(!show);
 
+   const resetValidationErrors = () => {
+      setErrorsModel('');
+      setErrorsModelPresent(false);
+      setErrorsCapacity('');
+      setErrorsCapacityPresent(false);
+      setErrorsYear('');
+      setErrorsYearPresent(false);
+   };
+
    const storeAirplane = event => {
       event.preventDefault();
+      resetValidationErrors();
       const data = {
          model: model,
          capacity: capacity,
@@ -24,6 +41,25 @@ function AirplanesComponent() {
       };
       AirplanesService.storeAirplane(data).then(response => {
          showModal();
+      }).catch(error => {
+         if (error.response.data.status == 400) {
+            error.response.data.errors.forEach(errorMessage => {
+               switch (errorMessage.field) {
+                  case "model":
+                     setErrorsModel(errorMessage.defaultMessage);
+                     setErrorsModelPresent(true);
+                     break;
+                  case "capacity":
+                     setErrorsCapacity(errorMessage.defaultMessage);
+                     setErrorsCapacityPresent(true);
+                     break;
+                  case "year":
+                     setErrorsYear(errorMessage.defaultMessage);
+                     setErrorsYearPresent(true);
+                     break;
+               }
+            })
+         }
       });
    };
 
@@ -92,28 +128,31 @@ function AirplanesComponent() {
                <div className="form-group">
                   <label htmlFor="model">Model</label>
                   <input type="text"
-                         className="form-control"
+                         className={`form-control ${errorsModelPresent ? "border border-danger" : ""}`}
                          id="model"
                          value={model}
                          onChange={event => setModel(event.target.value)} />
+                  <ValidationErrorMessage errorMessage={errorsModel} />
                </div>
                <div className="form-group">
                   <label htmlFor="capacity">Kapacitet</label>
                   <input type="number"
                          min="1"
-                         className="form-control"
+                         className={`form-control ${errorsCapacityPresent ? "border border-danger" : ""}`}
                          id="capacity"
                          value={capacity}
                          onChange={event => setCapacity(event.target.value)} />
+                  <ValidationErrorMessage errorMessage={errorsCapacity} />
                </div>
                <div className="form-group">
                   <label htmlFor="year">Godina proizvodnje</label>
                   <input type="number"
                          min="1"
-                         className="form-control"
+                         className={`form-control ${errorsYearPresent ? "border border-danger" : ""}`}
                          id="year"
                          value={year}
                          onChange={event => setYear(event.target.value)} />
+                  <ValidationErrorMessage errorMessage={errorsYear} />
                </div>
                <button type="submit" className="btn btn-primary form-control" id="addAirplaneBtn" value="Dodaj avion">
                   <FontAwesomeIcon icon={faPlusCircle} /> Dodaj

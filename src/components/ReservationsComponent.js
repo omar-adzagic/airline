@@ -8,13 +8,12 @@ function ReservationsComponent() {
    useEffect(() => {
       ReservationsService.getReservations().then(response => {
          setReservations(response.data);
-         console.log(response.data);
       });
    }, []);
 
    return (
-      <div className="row">
-         <div className="col-xs-12 col-md-12">
+      <div className="reservations-container">
+         <div className="mt-3 mb-5">
             <h2 className="text-center">Stranica za pregled rezervacija</h2>
          </div>
          <div className="col-xs-12 col-md-12" id="reservationsbody">
@@ -36,7 +35,7 @@ function ReservationsComponent() {
                   {reservations.map(reservation => {
                      return (
                         <tr key={ reservation.id }>
-                           <td>{ reservation.user.firstName + " " + reservation.user.lastName }</td>
+                           <td>{ `${reservation.user.firstName} ${reservation.user.lastName}` }</td>
                            <td>{ convertToDateTimeFormat(reservation.time, 'DD/MM/YYYY') }</td>
                            <td>{ reservation.flight.cityFrom }</td>
                            <td>{ reservation.flight.cityTo }</td>

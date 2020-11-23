@@ -7,7 +7,6 @@ class AirplanesService {
    }
 
    getAirplanes() {
-      console.log('poz');
       const requestHeaders = {
          headers: {
             'Authorization': `Bearer ${this.jwtToken}`
@@ -24,7 +23,7 @@ class AirplanesService {
          url: restApiUrl,
          data: data,
          headers: {
-            Accept: 'application/json',
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${this.jwtToken}`
          },

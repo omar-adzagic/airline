@@ -13,6 +13,7 @@ class PromotionsService {
    }
 
    storePromotion(data) {
+      const jwtToken = localStorage.getItem('jwtToken');
       const restApiUrl = `http://localhost:8080/api/promotions/${data.flightId}`;
       return axios({
          method: 'PUT',
@@ -20,7 +21,8 @@ class PromotionsService {
          data: data.flight,
          headers: {
             Accept: 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwtToken}`
          },
       });
    }

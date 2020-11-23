@@ -1,8 +1,10 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import { Link, Route, Switch, useHistory, useLocation, Redirect } from "react-router-dom";
 import HomeComponent from "../HomeComponent";
+import UserHomeComponent from "../UserHomeComponent";
 import AirplanesComponent from "../AirplanesComponent";
 import FlightsComponent from "../FlightsComponent";
+import FlightComponent from "../FlightComponent";
 import ReservationsComponent from "../ReservationsComponent";
 import PromotionsComponent from "../PromotionsComponent";
 import MyReservations from "../MyReservations";
@@ -125,7 +127,7 @@ function Header() {
                      </div>
                      <div className="col-md-8 col-xs-12 navigationdiv">
                         <ul className="navigation">
-                           <li><a href="/">Početna</a></li>
+                           <li><Link to="/">Početna</Link></li>
                            <li><Link to="/reservations/my">Moje rezervacije</Link></li>
                            <li><a href="#" onClick={logout}>Odjavi se</a></li>
                         </ul>
@@ -134,8 +136,9 @@ function Header() {
                   <div className="row">
                      <UserContext.Provider value={{value, setValue}}>
                         <Switch>
-                           <Route path="/" exact component={HomeComponent} />
+                           <Route path="/" exact component={UserHomeComponent} />
                            {/*{ authenticated ? <Redirect to="/login" /> : <Route path="/airplanes" exact component={AirplanesComponent} /> }*/}
+                           <Route path="/flights/:flightId" exact component={FlightComponent} />
                            <Route path="/reservations/my" exact component={MyReservations} />
                            {/*<Route path="/login" exact component={LoginComponent} authenticate={user => console.log('jupi')} />*/}
                            <Route path="/login" exact render={(props) => <LoginComponent authenticate={(username, password) => authenticate(username, password)} {...props} />} />

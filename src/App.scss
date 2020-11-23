@@ -112,10 +112,6 @@ table {
    padding-right: 10px;
 }
 
-#adminpocetnatabela th{
-   background-color: yellow;
-}
-
 #airplanestable th {
    // background-color: ;
 }
@@ -129,7 +125,7 @@ a.delete{
 #reservationsbody,
 #flightbody {
    // padding-left: 25px;
-   margin: auto;
+   width: 100%;
 }
 
 #flightstable {
@@ -157,7 +153,7 @@ a.delete{
 
 #reservationsbody,
 #flightbody {
-   padding-right: 25px;
+   // padding-right: 25px;
 }
 
 input:disabled#addAirplaneBtn {
@@ -177,18 +173,51 @@ input:disabled#addFlightBtn {
 
 #flightdetails p {
    text-align: center;
-   font-weight: bold;
+   //font-weight: bold;
+   font-family: sans-serif;
+   margin-bottom: 0.5rem;
+}
+
+#flightdetails h2 {
+   text-align: center;
 }
 
 #flightdetails {
-   padding: 20px;
-   margin-top: 20px;
-   border: 2px solid grey;
-   box-shadow: 0px 0px 4px 4px grey;
-}
-
-#flightdetails{
-   background-color: white;
+   width: 33%;
+   padding: 2rem 3rem;
+   margin: 3rem auto 0 auto;
+   border: 1px solid #aaa;
+   border-radius: 4px;
+   background-color: #fff;
+   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+               rgba(0, 0, 0, 0.12) 0px -12px 30px,
+               rgba(0, 0, 0, 0.12) 0px 4px 6px,
+               rgba(0, 0, 0, 0.17) 0px 12px 13px,
+               rgba(0, 0, 0, 0.09) 0px -3px 5px;
+   .separator {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      .left {
+         display: flex;
+         flex-direction: column;
+         align-items: flex-end;
+         margin-right: 1rem;
+         font-weight: bold;
+      }
+      .right {
+         display: flex;
+         flex-direction: column;
+         align-items: flex-start;
+      }
+   }
+   .actions {
+      width: 50%;
+      margin: auto;
+      button {
+         margin-left: 0.5rem;
+      }
+   }
 }
 
 #prices{
@@ -217,24 +246,46 @@ input:disabled#addFlightBtn {
    margin-bottom: 0px;
 }
 
+.home-container,
+.reservations-container,
+.promotions-container {
+   margin: 0 auto;
+}
+
 .page-actions {
    display: flex;
    flex-direction: row;
-   justify-content: flex-end;
+   justify-content: space-between;
    margin-bottom: 0.5rem;
+   border: 1px solid #bbb;
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+   background-color: #eee;
 }
 
 .filters {
+   width: 100%;
    display: flex;
    flex-direction: row;
    justify-content: flex-end;
-   border: 1px solid #ccc;
-   border-radius: 5px;
    padding: 0.2rem 0.33rem;
+   margin: 0 auto 0.2rem auto;
+}
+
+.actions {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   margin-left: 0.5rem;
 }
 
 .filter {
+   text-align: center;
    margin-left: 1rem;
+   align-self: flex-end;
+}
+
+.action {
    align-self: flex-end;
 }
 
@@ -254,13 +305,16 @@ input:disabled#addFlightBtn {
 }
 
 #stats {
-   margin-top: 100px;
-   border-radius: 9px;
-   background-image: url("images/texture1.jpg");
+   //background-image: url("images/texture1.jpg");
+   background: rgba(86, 204, 242, 0.8);
+   background: -webkit-linear-gradient(to right, rgba(47, 128, 237, 0.8), rgba(86, 204, 242, 0.8));
+   background: linear-gradient(to right, rgba(47, 128, 237, 0.8), rgba(86, 204, 242, 0.8));
+
    text-align: center;
-   padding: 15px;
+   padding: 1rem 2rem;
    color: white;
-   border: 2px solid black;
+   //border: 1px solid #888;
+   border-radius: 3px;
 }
 
 #registerBtn {

@@ -1,8 +1,13 @@
 package com.specialist.exam.airline.domain;
 
-import com.sun.istack.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -12,24 +17,25 @@ public class Airplane {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(name = "model")
-    @NotNull
+    @NotEmpty(message = "Model je neophodan za unos.")
     private String model;
     @Column(name = "capacity")
-    @NotNull
-    // @Size(max=500)
+    @NotNull(message = "Kapacitet je neophodan za unos.")
+    @Min(value = 1, message="Minimalna vrijednost za kapacitet je 1.")
     private int capacity;
     @Column(name = "year")
-    @NotNull
-    // @Size(min=1)
+    @Min(value = 1914, message="Minimalna vrijednost za godinu je 1914.")
+    @NotNull(message = "Godina je neophodna za unos")
     private int year;
     @Column(name = "active")
-    private boolean active;
+    private Boolean active;
 
     // Relationships
+    @JsonBackReference
     @OneToMany(mappedBy = "airplane")
     private List<Flight> flights;
 
-    public Airplane(String model, int capacity, int year, boolean active) {
+    public Airplane(String model, int capacity, int year, Boolean active) {
         this.model = model;
         this.capacity = capacity;
         this.year = year;

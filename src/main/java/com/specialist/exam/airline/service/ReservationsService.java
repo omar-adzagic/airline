@@ -2,6 +2,7 @@ package com.specialist.exam.airline.service;
 
 import com.specialist.exam.airline.domain.Reservation;
 import com.specialist.exam.airline.repository.ReservationsRepository;
+import com.specialist.exam.airline.service.dto.ReservationsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,10 @@ public class ReservationsService {
 
     public List<Reservation> getMyReservations() {
         return this.reservationsRepository.getMyReservations();
+    }
+
+    public void storeReservation(Reservation reservation) {
+        this.reservationsRepository.save(reservation);
     }
 
     @Transactional

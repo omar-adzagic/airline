@@ -1,5 +1,8 @@
 package com.specialist.exam.airline.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -27,10 +30,13 @@ public class User implements UserDetails {
     private boolean active;
 
     // Relationships
-    @ManyToOne
+//    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role;
+    @JsonBackReference
     @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Reservation> reservations;
 
     public User(String firstName, String lastName, String email, String userName, String password, boolean active, Role role) {

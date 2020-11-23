@@ -20,7 +20,7 @@ public class AirplanesResource {
     }
 
     @PostMapping("/airplanes")
-    public String storeAirplane(@RequestBody @Valid Airplane newAirplane) {
+    public String storeAirplane(@Valid @RequestBody Airplane newAirplane) {
         this.airplanesService.storeAirplane(newAirplane);
         return null;
     }

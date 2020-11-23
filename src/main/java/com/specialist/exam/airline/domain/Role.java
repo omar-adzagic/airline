@@ -1,5 +1,7 @@
 package com.specialist.exam.airline.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -14,7 +16,9 @@ public class Role implements GrantedAuthority {
     @Column(name = "name")
     private String name;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "role")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<User> users;
 
     public Role(String name) {

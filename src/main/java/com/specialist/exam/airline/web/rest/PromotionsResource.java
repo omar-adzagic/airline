@@ -39,7 +39,11 @@ public class PromotionsResource {
     public ResponseEntity<Flight> storePromotion(@PathVariable Long id, @Valid @RequestBody Flight flightDetails) throws Exception {
         Flight flight = this.flightsRepository.findById(id)
                 .orElseThrow(() -> new Exception("Nije pronađena promocija sa idem :: " + id));
+        Promotion promotion = new Promotion();
+        promotion.setFlight(flight);
+        this.promotionsRepository.save(promotion);
         flight.setPrice(flightDetails.getPrice());
+        flight.setPromoted(true);
         final Flight updatedFlight = this.flightsRepository.save(flight);
         return ResponseEntity.ok(updatedFlight);
     }

@@ -1,10 +1,15 @@
 package com.specialist.exam.airline.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 @Table(name = "reservations")
 public class Reservation {
     @Id
@@ -16,20 +21,25 @@ public class Reservation {
     @Column(name = "time")
     @NotNull
     private Instant time;
+    @Column(name = "canceled", columnDefinition = "boolean default false")
+    private Boolean canceled;
 
     // Relationships
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @ManyToOne // fetch = FetchType.LAZY
     private User user;
-    @ManyToOne // fetch = FetchType.LAZY
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flight_id")
     private Flight flight;
 
-    public Reservation(@NotNull String reservationClass, @NotNull Instant time, User user, Flight flight) {
+    public Reservation(@NotNull String reservationClass, @NotNull Instant time, User user, Flight flight, Boolean canceled) {
         this.reservationClass = reservationClass;
         this.time = time;
         this.user = user;
         this.flight = flight;
+        this.canceled = canceled;
     }
 
     public Reservation() {}
@@ -72,5 +82,13 @@ public class Reservation {
 
     public void setFlight(Flight flight) {
         this.flight = flight;
+    }
+
+    public Boolean getCanceled() {
+        return canceled;
+    }
+
+    public void setCanceled(Boolean canceled) {
+        this.canceled = canceled;
     }
 }

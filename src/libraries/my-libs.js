@@ -1,4 +1,35 @@
-import moment from 'moment'
+import moment from 'moment';
+import Swal from 'sweetalert2';
+
+export const swalNotification = (type, message) => {
+   switch(type) {
+      case "success":
+         return Swal.fire({
+            icon: type,
+            title: "Uspjeh!",
+            text: message,
+            showConfirmButton: false,
+            timer: 2000
+         });
+      case "success-confirm":
+         return Swal.fire({
+            icon: "success",
+            title: "Uspjeh!",
+            text: message,
+            showConfirmButton: true,
+            confirmButtonText: "U redu"
+         });
+      case "error":
+         return Swal.fire({
+            icon: type,
+            title: "Nevalidna akcija!",
+            text: message,
+            showConfirmButton: true,
+            confirmButtonText: 'U redu',
+            confirmButtonColor: '#138496'
+         });
+   }
+};
 
 export const checkIfNotEmpty = (value) => value !== null && value !== undefined && value !== '';
 export const checkIfEmpty = (value) => !checkIfNotEmpty(value);

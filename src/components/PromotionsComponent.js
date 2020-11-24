@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import PromotionsService from "../services/PromotionsService";
-import {checkIfNotEmpty, convertToDateTimeFormat} from "../libraries/my-libs";
+import {checkIfNotEmpty, convertToDateTimeFormat, swalNotification} from "../libraries/my-libs";
 import AirplaneCreate from "./AirplaneCreate";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faTrashAlt} from "@fortawesome/free-solid-svg-icons";
+import FlightsService from "../services/FlightsService";
 
 function PromotionsComponent() {
    const [show, setShow] = useState(false);
@@ -24,7 +27,23 @@ function PromotionsComponent() {
          flight: flight,
          flightId: flightId
       };
-      PromotionsService.storePromotion(data).then(response => showModal());
+      PromotionsService.storePromotion(data).then(response => {
+         showModal();
+         const newPromotions = [response.data, ...promotions];
+         setPromotions(newPromotions);
+      });
+   };
+
+   const deletePromotion = (event, id) => {
+      event.preventDefault();
+      PromotionsService.deletePromotion(id).then(response => {
+         const newPromotions = promotions.filter(promtion => promtion.id != id);
+         setPromotions(newPromotions);
+      }).catch(error => {
+         if (error.response.data.status == 400) {
+            swalNotification('error', error.response.data.message);
+         }
+      });
    };
 
    useEffect(() => {
@@ -52,6 +71,7 @@ function PromotionsComponent() {
                      <th>Destinacija</th>
                      <th>Cijena</th>
                      <th>Datum leta</th>
+                     <th>Akcija</th>
                   </tr>
                </thead>
                <tbody>
@@ -62,6 +82,11 @@ function PromotionsComponent() {
                            <td>{ promotion.flight.cityTo }</td>
                            <td>{ promotion.flight.price } &euro;</td>
                            <td>{ convertToDateTimeFormat(promotion.flight.flightDate, 'DD/MM/YYYY') }</td>
+                           <td>
+                              <button type="button" className="btn btn-sm btn-danger" onClick={ event => deletePromotion(event, promotion.id) }>
+                                 <FontAwesomeIcon icon={faTrashAlt} /> Izbriši
+                              </button>
+                           </td>
                         </tr>
                      )
                   })}

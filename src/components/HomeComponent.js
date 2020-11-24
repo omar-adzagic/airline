@@ -111,9 +111,6 @@ function HomeComponent() {
                           </tr>
                       );
                    })}
-                   {/*<?php*/}
-                   {/*  }*/}
-                   {/*?>*/}
                 </tbody>
              </table>
           </div>

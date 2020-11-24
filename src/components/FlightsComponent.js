@@ -4,7 +4,13 @@ import FlightsService from "../services/FlightsService";
 import AirplaneCreate from "./AirplaneCreate";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faPlusCircle, faEye } from '@fortawesome/free-solid-svg-icons';
-import {checkIfEmpty, checkIfNotEmpty, convertToDateTimeFormat, convertToMysqlDateFormat} from "../libraries/my-libs";
+import {
+   checkIfEmpty,
+   checkIfNotEmpty,
+   convertToDateTimeFormat,
+   convertToMysqlDateFormat,
+   swalNotification
+} from "../libraries/my-libs";
 import "flatpickr/dist/themes/material_green.css";
 import Flatpickr from "react-flatpickr";
 import ValidationErrorMessage from "./partials/ValidationErrorMessage";
@@ -114,8 +120,10 @@ function FlightsComponent() {
          }
       }
       FlightsService.storeFlight(data).then(response => {
-         console.log(response);
          showModal();
+         console.log(response.data);
+         const flightsUpdated = [response.data, ...flights];
+         setFlights(flightsUpdated);
       }).catch(error => {
          if (error.response.data.status == 400) {
             error.response.data.errors.forEach(errorMessage => {
@@ -157,7 +165,12 @@ function FlightsComponent() {
    const deleteFlight = (event, id) => {
       event.preventDefault();
       FlightsService.deleteFlight(id).then(response => {
-         console.log('deleted');
+         const newFlights = flights.filter(flight => flight.id != id);
+         setFlights(newFlights);
+      }).catch(error => {
+         if (error.response.data.status == 400) {
+            swalNotification('error', error.response.data.message);
+         }
       });
    };
 
@@ -295,7 +308,7 @@ function FlightsComponent() {
                         <td>{ flight.cityTo }</td>
                         <td>{ convertToDateTimeFormat(flight.flightDate, 'DD/MM/YYYY') }</td>
                         <td>{ convertToDateTimeFormat(flight.boardingTime, 'DD/MM/YYYY') }</td>
-                        <td>{ convertToDateTimeFormat(flight.boardingTimeReturn, 'DD/MM/YYYY') }</td>
+                        <td>{ checkIfNotEmpty(flight.boardingTimeReturn) ? convertToDateTimeFormat(flight.boardingTimeReturn, 'HH:mm') : (<small className="font-italic">Let u jednom smjeru</small>) }</td>
                         <td>{ flight.price } &euro;</td>
                         <td>{ flight.airplane.model }</td>
                         <td>

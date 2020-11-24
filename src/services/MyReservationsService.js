@@ -1,14 +1,33 @@
 import axios from 'axios';
 
 class MyReservationsService {
-   getMyReservations() {
-      const reservationsRestApiUrl = `http://localhost:8080/api/reservations/my`;
-      return axios.get(reservationsRestApiUrl);
+   constructor() {
+      this.jwtToken = localStorage.getItem('jwtToken');
    }
 
-   toggleReservation(reservationId) {
-      const reservationsRestApiUrl = `http://localhost:8080/api/reservations/${reservationId}/toggle`;
-      return axios.post(reservationsRestApiUrl);
+   getMyReservations() {
+      const requestHeaders = {
+         headers: {
+            'Authorization': `Bearer ${this.jwtToken}`
+         }
+      };
+      const user = JSON.parse(localStorage.getItem('user'));
+      const reservationsRestApiUrl = `http://localhost:8080/api/reservations/${user.id}`;
+      return axios.get(reservationsRestApiUrl, requestHeaders);
+   }
+
+   cancelReservation(reservationId) {
+      const restApiUrl = `http://localhost:8080/api/reservations/${reservationId}/cancel`;
+      return axios({
+         method: 'PUT',
+         url: restApiUrl,
+         data: {},
+         headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.jwtToken}`
+         },
+      });
    }
 }
 

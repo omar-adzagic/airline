@@ -25,7 +25,7 @@ class AirplaneCreate extends React.Component {
             <h2>{this.props.title}</h2>
             <div className="content">{this.props.children}</div>
             <div className="actions">
-               <button className="toggle-button" onClick={e => { this.onClose(e) }}>
+               <button className="btn btn-secondary" onClick={e => { this.onClose(e) }}>
                   Zatvori
                </button>
                {/*<button className="toggle-button" >*/}

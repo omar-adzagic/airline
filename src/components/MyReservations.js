@@ -5,10 +5,24 @@ import { convertToDateTimeFormat } from "../libraries/my-libs";
 function MyReservations() {
    const [myReservations, setMyReservations] = useState([]);
 
-   const cancelReservation = reservationId => {
-      MyReservationsService.toggleReservation().then(response => {
-         console.log(response);
+   const cancelReservation = (event, reservationId) => {
+      event.preventDefault();
+      MyReservationsService.cancelReservation(reservationId).then(response => {
+         const updatedReservation = response.data;
+         const newReservations = myReservations.map(reservation => reservation.id != updatedReservation.id ? reservation : updatedReservation);
+         setMyReservations(newReservations);
       });
+   };
+
+   const CanceledReservations = (props) => {
+      return props.reservation.canceled ? (
+              <span className="badge badge-danger">Otkazano</span>
+          ) :
+          (
+              <button className="btn btn-warning" onClick={event => cancelReservation(event, props.reservation.id)}>
+                 Otkaži
+              </button>
+          )
    };
 
    useEffect(() => {
@@ -18,8 +32,8 @@ function MyReservations() {
    }, []);
 
    return (
-      <div className="row">
-         <div className="col-xs-12 col-md-12">
+      <div className="reservations-container">
+         <div className="mt-3 mb-5">
             <h2 className="text-center">Moje rezervacije</h2>
          </div>
          <div className="col-xs-12 col-md-12" id="reservationsbody">
@@ -43,7 +57,7 @@ function MyReservations() {
                   return (
                      <tr key={ reservation.id }>
                         <td>{ reservation.user.firstName + " " + reservation.user.lastName }</td>
-                        <td>{ convertToDateTimeFormat(reservation.time, 'DD/MM/YYYY') }</td>
+                        <td>{ convertToDateTimeFormat(reservation.time, 'HH:mm') }</td>
                         <td>{ reservation.flight.cityFrom }</td>
                         <td>{ reservation.flight.cityTo }</td>
                         <td>{ convertToDateTimeFormat(reservation.flight.flightDate, 'DD/MM/YYYY') }</td>
@@ -51,9 +65,7 @@ function MyReservations() {
                         <td>{ reservation.reservationClass }</td>
                         <td>{ reservation.flight.price } &euro;</td>
                         <td>
-                           <button className="btn btn-warning" onClick={cancelReservation(reservation.id)}>
-                              Otkaži
-                           </button>
+                           { <CanceledReservations reservation={reservation} /> }
                         </td>
                      </tr>
                   )

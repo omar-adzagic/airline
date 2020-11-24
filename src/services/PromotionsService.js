@@ -1,11 +1,14 @@
 import axios from 'axios';
 
 class PromotionsService {
+   constructor() {
+      this.jwtToken = localStorage.getItem('jwtToken');
+   }
+
    getPromotions() {
-      const jwtToken = localStorage.getItem('jwtToken');
       const requestHeaders = {
          headers: {
-            'Authorization': `Bearer ${jwtToken}`
+            'Authorization': `Bearer ${this.jwtToken}`
          }
       };
       const restApiUrl = `http://localhost:8080/api/promotions`;
@@ -13,7 +16,6 @@ class PromotionsService {
    }
 
    storePromotion(data) {
-      const jwtToken = localStorage.getItem('jwtToken');
       const restApiUrl = `http://localhost:8080/api/promotions/${data.flightId}`;
       return axios({
          method: 'PUT',
@@ -22,9 +24,19 @@ class PromotionsService {
          headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${jwtToken}`
+            'Authorization': `Bearer ${this.jwtToken}`
          },
       });
+   }
+
+   deletePromotion(id) {
+      const requestHeaders = {
+         headers: {
+            'Authorization': `Bearer ${this.jwtToken}`
+         }
+      };
+      const restApiUrl = `http://localhost:8080/api/promotions/${id}`;
+      return axios.delete(restApiUrl, requestHeaders);
    }
 }
 

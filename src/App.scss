@@ -140,6 +140,13 @@ a.delete{
    flex-direction: column;
 }
 
+.actions-container {
+   margin-bottom: 0.5rem;
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-end;
+}
+
 .page-container {
    margin: auto;
 }
@@ -250,6 +257,12 @@ input:disabled#addFlightBtn {
 .reservations-container,
 .promotions-container {
    margin: 0 auto;
+}
+
+.promotions-container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
 }
 
 .page-actions {

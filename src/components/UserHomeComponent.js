@@ -50,6 +50,10 @@ function UserHomeComponent() {
         }
     };
 
+    const ReturnTime = props => {
+        return checkIfEmpty(props.boardingTimeReturn) ? (<small className="font-italic">Let u jednom smjeru</small>) : convertToDateTimeFormat(props.boardingTimeReturn, 'HH:mm');
+    };
+
     useEffect(() => {
         FlightsService.getData().then(response => {
             setFlights(response.data.flights);
@@ -67,14 +71,14 @@ function UserHomeComponent() {
             </div>
             <div className="page-actions">
                 <div className="filters">
-                    <div className="filter">
-                        <label htmlFor="datumFrom">Datum polaska</label>
-                        <input type="date" className="form-control" id="datumFrom" min="" required />
-                    </div>
-                    <div className="filter">
-                        <label htmlFor="datumTo">Datum dolaska</label>
-                        <input type="date" className="form-control" id="datumTo" min="" />
-                    </div>
+                    {/*<div className="filter">*/}
+                    {/*    <label htmlFor="datumFrom">Datum polaska</label>*/}
+                    {/*    <input type="date" className="form-control" id="datumFrom" min="" required />*/}
+                    {/*</div>*/}
+                    {/*<div className="filter">*/}
+                    {/*    <label htmlFor="datumTo">Datum dolaska</label>*/}
+                    {/*    <input type="date" className="form-control" id="datumTo" min="" />*/}
+                    {/*</div>*/}
                     <div className="filter">
                         <label htmlFor="citiesFrom">Mjesto polaska</label>
                         <select id="citiesFrom"
@@ -96,9 +100,7 @@ function UserHomeComponent() {
                                 onChange={filterCityToFlights}>
                             <option value="">Svi</option>
                             {citiesTo.map(cityTo => {
-                                return (
-                                    <option value={cityTo} key={cityTo}>{cityTo}</option>
-                                )
+                                return (<option value={cityTo} key={cityTo}>{cityTo}</option>)
                             })}
                         </select>
                     </div>
@@ -129,9 +131,9 @@ function UserHomeComponent() {
                         <tr key={flight.id}>
                             <td>{flight.cityFrom}</td>
                             <td>{flight.cityTo}</td>
-                            <td>{checkIfNotEmpty(flight.returnDate) ? convertToDateTimeFormat(flight.flightDate, 'DD/MM/YYYY') + ` (u jednom smjeru)` : ` do ${flight.returnDate}`}</td>
-                            <td>{convertToDateTimeFormat(flight.boardingTime, 'DD/MM/YYYY')}</td>
-                            <td>{checkIfNotEmpty(flight.boardingTimeReturn) ? `nije povratna` : flight.boardingTimeReturn}</td>
+                            <td>{convertToDateTimeFormat(flight.flightDate, 'DD/MM/YYYY')}</td>
+                            <td>{convertToDateTimeFormat(flight.boardingTime, 'HH:mm')}</td>
+                            <td>{<ReturnTime boardingTimeReturn={flight.boardingTimeReturn} />}</td>
                             <td>{flight.price} &euro;</td>
                             <td>{flight.airplane.model}</td>
                             <td>

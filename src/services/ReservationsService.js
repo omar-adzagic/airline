@@ -1,11 +1,14 @@
 import axios from 'axios';
 
 class ReservationsService {
+   constructor() {
+      this.jwtToken = localStorage.getItem('jwtToken');
+   }
+
    getReservations() {
-      const jwtToken = localStorage.getItem('jwtToken');
       const requestHeaders = {
          headers: {
-            'Authorization': `Bearer ${jwtToken}`
+            'Authorization': `Bearer ${this.jwtToken}`
          }
       };
       const restApiUrl = `http://localhost:8080/api/reservations`;
@@ -13,18 +16,26 @@ class ReservationsService {
    }
 
    getHomeData() {
-      const jwtToken = localStorage.getItem('jwtToken');
       const requestHeaders = {
          headers: {
-            'Authorization': `Bearer ${jwtToken}`
+            'Authorization': `Bearer ${this.jwtToken}`
          }
       };
       const restApiUrl = `http://localhost:8080/api/reservations/stats`;
       return axios.get(restApiUrl, requestHeaders);
    }
 
+   deleteReservation(id) {
+      const requestHeaders = {
+         headers: {
+            'Authorization': `Bearer ${this.jwtToken}`
+         }
+      };
+      const restApiUrl = `http://localhost:8080/api/reservations/${id}`;
+      return axios.delete(restApiUrl, requestHeaders);
+   }
+
    makeReservation(data) {
-      const jwtToken = localStorage.getItem('jwtToken');
       const restApiUrl = `http://localhost:8080/api/reservations`;
       return axios({
          method: 'POST',
@@ -33,7 +44,7 @@ class ReservationsService {
          headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${jwtToken}`
+            'Authorization': `Bearer ${this.jwtToken}`
          },
       });
    }

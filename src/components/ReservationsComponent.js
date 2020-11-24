@@ -1,9 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import ReservationsService from "../services/ReservationsService";
-import { convertToDateTimeFormat } from "../libraries/my-libs";
+import {convertToDateTimeFormat, swalNotification} from "../libraries/my-libs";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faTrashAlt} from "@fortawesome/free-solid-svg-icons";
+import FlightsService from "../services/FlightsService";
 
 function ReservationsComponent() {
    const [reservations, setReservations] = useState([]);
+
+   const deleteReservation = (event, id) => {
+      event.preventDefault();
+      ReservationsService.deleteReservation(id).then(response => {
+         console.log('poz1');
+         const newReservations = reservations.filter(flight => flight.id != id);
+         setReservations(newReservations);
+      }).catch(error => {
+         console.log(error.response.data);
+         if (error.response.data.status == 400) {
+            swalNotification('error', error.response.data.message);
+         }
+      });
+   };
 
    useEffect(() => {
       ReservationsService.getReservations().then(response => {
@@ -28,6 +45,7 @@ function ReservationsComponent() {
                      <th>Model aviona</th>
                      <th>Klasa leta</th>
                      <th>Cijena</th>
+                     <th>Akcija</th>
                   </tr>
                </thead>
                <tbody>
@@ -43,6 +61,11 @@ function ReservationsComponent() {
                            <td>{ reservation.flight.airplane.model }</td>
                            <td>{ reservation.reservationClass }</td>
                            <td>{ reservation.flight.price } &euro;</td>
+                           <td>
+                              <button type="button" className="btn btn-sm btn-danger" onClick={ event => deleteReservation(event, reservation.id) }>
+                                 <FontAwesomeIcon icon={faTrashAlt} /> Izbriši
+                              </button>
+                           </td>
                         </tr>
                      )
                   })}

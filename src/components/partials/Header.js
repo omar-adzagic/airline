@@ -20,6 +20,7 @@ function Header() {
    const [value, setValue] = useState(null);
    const [username, setUsername] = useState('');
    const [password, setPassword] = useState('');
+   const [unauthorizedError, setUnauthorizedError] = useState('');
 
    // const providerValue = useMemo(() => ({ value, setValue }), [value, setValue]);
 
@@ -55,7 +56,7 @@ function Header() {
          window.location.href = '/';
       }).catch(error => {
          if (error.response.data.status == 401) {
-
+            setUnauthorizedError('Unesite validne kredencijale.');
          }
       });
    };
@@ -108,7 +109,7 @@ function Header() {
                            <Route path="/promotions" exact component={PromotionsComponent} />
                            <Route path="/reservations/my" exact component={MyReservations} />
                            {/*<Route path="/login" exact component={LoginComponent} authenticate={user => console.log('jupi')} />*/}
-                           <Route path="/login" exact render={(props) => <LoginComponent authenticate={(username, password) => authenticate(username, password)} {...props} />} />
+                           <Route path="/login" exact render={(props) => <LoginComponent unauthorizedError={unauthorizedError} authenticate={(username, password) => authenticate(username, password)} {...props} />} />
                         </Switch>
                      </UserContext.Provider>
                   </div>
@@ -127,8 +128,8 @@ function Header() {
                      </div>
                      <div className="col-md-8 col-xs-12 navigationdiv">
                         <ul className="navigation">
-                           <li><Link to="/">Početna</Link></li>
-                           <li><Link to="/reservations/my">Moje rezervacije</Link></li>
+                           <li><Link to="/" className={location.pathname == '/' ? 'active' : ''}>Početna</Link></li>
+                           <li><Link to="/reservations/my" className={location.pathname == '/reservations/my' ? 'active' : ''}>Moje rezervacije</Link></li>
                            <li><a href="#" onClick={logout}>Odjavi se</a></li>
                         </ul>
                      </div>
@@ -141,7 +142,7 @@ function Header() {
                            <Route path="/flights/:flightId" exact component={FlightComponent} />
                            <Route path="/reservations/my" exact component={MyReservations} />
                            {/*<Route path="/login" exact component={LoginComponent} authenticate={user => console.log('jupi')} />*/}
-                           <Route path="/login" exact render={(props) => <LoginComponent authenticate={(username, password) => authenticate(username, password)} {...props} />} />
+                           <Route path="/login" exact render={(props) => <LoginComponent unauthorizedError={unauthorizedError} authenticate={(username, password) => authenticate(username, password)} {...props} />} />
                         </Switch>
                      </UserContext.Provider>
                   </div>
@@ -159,7 +160,7 @@ function Header() {
                      {/*<Route path="/login" exact component={LoginComponent} />*/}
                      <Route path="/login"
                             exact
-                            render={(props) => <LoginComponent authenticate={(username, password) => authenticate(username, password)} {...props} />} />
+                            render={(props) => <LoginComponent unauthorizedError={unauthorizedError} authenticate={(username, password) => authenticate(username, password)} {...props} />} />
                   </Switch>
                </div>
             </div>

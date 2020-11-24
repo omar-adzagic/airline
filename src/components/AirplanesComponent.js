@@ -5,6 +5,7 @@ import AirplaneCreate from "./AirplaneCreate";
 import ValidationErrorMessage from "./partials/ValidationErrorMessage";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { swalNotification} from "../libraries/my-libs";
 
 function AirplanesComponent() {
    const [show, setShow] = useState(false);
@@ -41,6 +42,8 @@ function AirplanesComponent() {
       };
       AirplanesService.storeAirplane(data).then(response => {
          showModal();
+         const newArray = [response.data, ...airplanes];
+         setAirplanes(newArray);
       }).catch(error => {
          if (error.response.data.status == 400) {
             error.response.data.errors.forEach(errorMessage => {
@@ -67,6 +70,10 @@ function AirplanesComponent() {
       event.preventDefault();
       AirplanesService.deleteAirplane(id).then(response => {
          getAirplanes();
+      }).catch(error => {
+         if (error.response.data.status == 400) {
+            swalNotification('error', error.response.data.message);
+         }
       });
    };
 
@@ -91,7 +98,10 @@ function AirplanesComponent() {
          </div>
          <div id="airplanesbody">
             <div className="actions-container">
-               <button id="centered-toggle-button" className="btn btn-primary toggle-button" type="button" onClick={event => {showModal()}}>
+               <button id="centered-toggle-button"
+                       className="btn btn-primary toggle-button"
+                       type="button"
+                       onClick={event => {showModal()}}>
                   Dodaj avion
                </button>
             </div>

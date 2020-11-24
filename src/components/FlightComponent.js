@@ -18,6 +18,7 @@ function FlightComponent({ match }) {
     useEffect(() => {
         FlightsService.getFlight(flightId).then(response => {
             setFlight(response.data);
+            console.log(response.data);
             setAirplane(response.data.airplane);
         });
     }, [flightId]);
@@ -32,8 +33,12 @@ function FlightComponent({ match }) {
             canceled: false,
             user: { id: user.id }
         };
-        ReservationsService.makeReservation(data);
+        ReservationsService.makeReservation(data).then(response => {
+            window.location.href = "/reservations/my";
+        });
     };
+
+    const formatFlightPrice = flightPrice => (flightPrice * 0.4).toFixed(2);
 
     return (
         <div id="flightbody">
@@ -56,7 +61,7 @@ function FlightComponent({ match }) {
                         <p>{ flight.cityTo }</p>
                         <p>{ convertToDateTimeFormat(flight.flightDate, 'DD/MM/YYYY') }</p>
                         <p>{ convertToDateTimeFormat(flight.boardingTime, 'HH:mm') }</p>
-                        <p>{ flight.price * 0.4 } &euro;</p>
+                        <p>{ formatFlightPrice(flight.price) } &euro;</p>
                         <p>{ flight.price } &euro;</p>
                         <p>{ airplane.model }</p>
                         <p>{ airplane.capacity }</p>
@@ -82,7 +87,6 @@ function FlightComponent({ match }) {
                             onClick={(event) => makeReservation(event, flight.id) }>Rezerviši</button>
                 </div>
             </div>
-
             {/*<style>*/}
             {/*body {*/}
             {/*background - image: url('images/airplanetakeoff.jpg');*/}

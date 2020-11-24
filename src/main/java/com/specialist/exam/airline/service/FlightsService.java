@@ -32,8 +32,8 @@ public class FlightsService {
         return flightsScreenDTO;
     }
 
-    public void storeFlight(Flight flight) {
-        this.flightsRepository.save(flight);
+    public Flight storeFlight(Flight flight) {
+        return flightsRepository.save(flight);
     }
 
     public void deleteFlight(Long id) {

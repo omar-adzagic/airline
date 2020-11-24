@@ -2,6 +2,7 @@ package com.specialist.exam.airline.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ import java.util.List;
 @Table(name = "airplanes")
 public class Airplane {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "model")
     @NotEmpty(message = "Model je neophodan za unos.")
@@ -31,8 +32,8 @@ public class Airplane {
     private Boolean active;
 
     // Relationships
-    @JsonBackReference
     @OneToMany(mappedBy = "airplane")
+    @JsonIgnore
     private List<Flight> flights;
 
     public Airplane(String model, int capacity, int year, Boolean active) {
@@ -82,5 +83,21 @@ public class Airplane {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public List<Flight> getFlights() {
+        return flights;
+    }
+
+    public void setFlights(List<Flight> flights) {
+        this.flights = flights;
     }
 }

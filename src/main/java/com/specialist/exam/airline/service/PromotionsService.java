@@ -17,6 +17,10 @@ public class PromotionsService {
         return this.promotionsRepository.findAll();
     }
 
+    public void deletePromotion(Long id) {
+        promotionsRepository.deleteById(id);
+    }
+
     @Transactional
     public void deleteAll() {
         this.promotionsRepository.deleteAll();

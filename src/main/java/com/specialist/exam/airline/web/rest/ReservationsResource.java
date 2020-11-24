@@ -7,12 +7,14 @@ import com.specialist.exam.airline.repository.ReservationsRepository;
 import com.specialist.exam.airline.service.ReservationsService;
 import com.specialist.exam.airline.service.dto.ReservationsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -27,9 +29,9 @@ public class ReservationsResource {
         return this.reservationsService.getReservations();
     }
 
-    @GetMapping("/reservations/my")
-    public List<Reservation> getMyReservations() {
-        return this.reservationsService.getMyReservations();
+    @GetMapping("/reservations/{userId}")
+    public List<Reservation> getMyReservations(@PathVariable Long userId) {
+        return this.reservationsService.getMyReservations(userId);
     }
 
     @GetMapping("/reservations/stats")
@@ -53,8 +55,21 @@ public class ReservationsResource {
 
     @PostMapping("/reservations")
     public Reservation storeReservation(@Valid @RequestBody Reservation newReservation) {
-        return newReservation;
-//        this.reservationsService.storeReservation(newReservation);
-//        return newReservation;
+        return reservationsService.storeReservation(newReservation);
+    }
+
+    @PutMapping("/reservations/{id}/cancel")
+    public ResponseEntity<Reservation> cancelReservation(@PathVariable Long id) {
+        Optional<Reservation> optionalReservation = reservationsRepository.findById(id);
+        Reservation reservation = optionalReservation.get();
+        reservation.setCanceled(true);
+        reservationsRepository.save(reservation);
+        return ResponseEntity.ok(reservation);
+    }
+
+    @DeleteMapping("/reservations/{id}")
+    public ResponseEntity deleteReservation(@PathVariable Long id) {
+        reservationsService.deleteReservation(id);
+        return ResponseEntity.ok().build();
     }
 }

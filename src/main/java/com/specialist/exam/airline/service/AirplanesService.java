@@ -17,8 +17,8 @@ public class AirplanesService {
         return this.airplanesRepository.findAll();
     }
 
-    public void storeAirplane(Airplane airplane) {
-        this.airplanesRepository.save(airplane);
+    public Airplane storeAirplane(Airplane airplane) {
+        return airplanesRepository.save(airplane);
     }
 
     public void deleteAirplane(Long id) {

@@ -2,15 +2,21 @@ package com.specialist.exam.airline.web.rest;
 
 import com.specialist.exam.airline.domain.Airplane;
 import com.specialist.exam.airline.domain.Flight;
+import com.specialist.exam.airline.exceptions.ErrorResponse;
+import com.specialist.exam.airline.repository.AirplanesRepository;
 import com.specialist.exam.airline.repository.FlightsRepository;
+import com.specialist.exam.airline.repository.PromotionsRepository;
+import com.specialist.exam.airline.repository.ReservationsRepository;
 import com.specialist.exam.airline.service.FlightsService;
 import com.specialist.exam.airline.service.dto.FlightsScreenDTO;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +30,12 @@ public class FlightsResource {
     private FlightsService flightsService;
     @Autowired
     private FlightsRepository flightsRepository;
+    @Autowired
+    private AirplanesRepository airplanesRepository;
+    @Autowired
+    private ReservationsRepository reservationsRepository;
+    @Autowired
+    private PromotionsRepository promotionsRepository;
 
     @GetMapping("/flights")
     public FlightsScreenDTO getFlights() {
@@ -37,14 +49,35 @@ public class FlightsResource {
     }
 
     @PostMapping("/flights")
-    public void storeFlight(@RequestBody @Valid Flight newFlight) {
+    public Flight storeFlight(@RequestBody @Valid Flight newFlight) {
 //        return newFlight;
-        flightsService.storeFlight(newFlight);
+        Long airplianeId = newFlight.getAirplane().getId();
+        Optional<Airplane> optionalAirplane = airplanesRepository.findById(airplianeId);
+        newFlight.setAirplane(optionalAirplane.get());
+        return flightsService.storeFlight(newFlight);
     }
 
     @DeleteMapping("/flights/{id}")
-    public void deleteFlight(@PathVariable Long id) {
+    public ResponseEntity deleteFlight(@PathVariable Long id) {
+        Integer reservationsCount = reservationsRepository.getFlightReservationsCount(id);
+        Integer promotionsCount = promotionsRepository.getFlightPromotionsCount(id);
+        if (reservationsCount > 0) {
+            ErrorResponse errorResponse = new ErrorResponse();
+            errorResponse.setTimestamp(Instant.now().toString());
+            errorResponse.setStatus(400);
+            errorResponse.setError("Bad Request");
+            errorResponse.setMessage("Ovaj let posjeduje rezervacije. Potrebno je prvo ukloniti sve rezervacije koje su u vezi sa ovim letom.");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } else if (promotionsCount > 0) {
+            ErrorResponse errorResponse = new ErrorResponse();
+            errorResponse.setTimestamp(Instant.now().toString());
+            errorResponse.setStatus(400);
+            errorResponse.setError("Bad Request");
+            errorResponse.setMessage("Ovaj let posjeduje promo cijene. Potrebno je prvo ukloniti sve promo cijene koje su u vezi sa ovim letom.");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
         flightsService.deleteFlight(id);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/flights/filter")

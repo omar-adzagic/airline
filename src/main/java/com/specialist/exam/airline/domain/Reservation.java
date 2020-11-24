@@ -1,5 +1,6 @@
 package com.specialist.exam.airline.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -13,7 +14,7 @@ import java.time.Instant;
 @Table(name = "reservations")
 public class Reservation {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "reservation_class")
     @NotNull
@@ -25,11 +26,11 @@ public class Reservation {
     private Boolean canceled;
 
     // Relationships
-    @JsonManagedReference
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    @JsonManagedReference
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flight_id")
     private Flight flight;
@@ -91,4 +92,6 @@ public class Reservation {
     public void setCanceled(Boolean canceled) {
         this.canceled = canceled;
     }
+
+
 }

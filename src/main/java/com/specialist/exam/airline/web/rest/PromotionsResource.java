@@ -36,7 +36,7 @@ public class PromotionsResource {
     }
 
     @PutMapping("/promotions/{id}")
-    public ResponseEntity<Flight> storePromotion(@PathVariable Long id, @Valid @RequestBody Flight flightDetails) throws Exception {
+    public ResponseEntity<Promotion> storePromotion(@PathVariable Long id, @Valid @RequestBody Flight flightDetails) throws Exception {
         Flight flight = this.flightsRepository.findById(id)
                 .orElseThrow(() -> new Exception("Nije pronađena promocija sa idem :: " + id));
         Promotion promotion = new Promotion();
@@ -45,6 +45,12 @@ public class PromotionsResource {
         flight.setPrice(flightDetails.getPrice());
         flight.setPromoted(true);
         final Flight updatedFlight = this.flightsRepository.save(flight);
-        return ResponseEntity.ok(updatedFlight);
+        return ResponseEntity.ok(promotion);
+    }
+
+    @DeleteMapping("/promotions/{id}")
+    public ResponseEntity deleteReservation(@PathVariable Long id) {
+        promotionsService.deletePromotion(id);
+        return ResponseEntity.ok().build();
     }
 }

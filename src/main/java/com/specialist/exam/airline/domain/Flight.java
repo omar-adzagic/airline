@@ -1,6 +1,7 @@
 package com.specialist.exam.airline.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ import java.util.List;
 @Table(name = "flights")
 public class Flight {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "flight_date")
     @NotNull(message = "Potrebno je izabrati datum polaska.")
@@ -48,13 +49,13 @@ public class Flight {
     private boolean promoted;
 
     // Relationships
-    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "airplane_id")
-    @NotNull(message = "Potrebno je izaberiti model aviona.")
+    @NotNull(message = "Potrebno je izabrati model aviona.")
     private Airplane airplane;
-    @JsonBackReference
+
     @OneToMany(mappedBy = "flight")
+    @JsonIgnore
     private List<Reservation> reservations;
 
     public Flight() {}
@@ -158,5 +159,13 @@ public class Flight {
 
     public void setAirplane(Airplane airplane) {
         this.airplane = airplane;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 }

@@ -1,6 +1,7 @@
 package com.specialist.exam.airline.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -11,14 +12,14 @@ import java.util.List;
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "name")
     private String name;
 
-    @JsonBackReference
+
     @OneToMany(mappedBy = "role")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
     private List<User> users;
 
     public Role(String name) {
@@ -55,4 +56,6 @@ public class Role implements GrantedAuthority {
     public String getAuthority() {
         return name;
     }
+
+
 }

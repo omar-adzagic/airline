@@ -49,16 +49,9 @@ public class AirlineApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 //        this.reservationsService.deleteAll();
 //        this.reservationsRepository.flush();
-        this.promotionsService.deleteAll();
-        this.promotionsRepository.flush();
-        this.flightsService.deleteAll();
-        this.flightsRepository.flush();
-        this.rolesRepository.deleteAll();
-        this.rolesRepository.flush();
-        this.userRepository.deleteAll();
-        this.userRepository.flush();
-        this.airplanesRepository.deleteAll();
-        this.airplanesRepository.flush();
+        if (rolesRepository.count() != 0) {
+            return;
+        }
 
         Role admin = new Role("ADMIN");
         this.rolesRepository.save(admin);

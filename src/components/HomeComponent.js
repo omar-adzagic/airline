@@ -72,22 +72,30 @@ function HomeComponent() {
    }, []);
 
    return (
-       <div className="home-container">
-          <div>
-             <h2 className="text-center mt-3 mb-5">Posljednje rezervacije</h2>
-             <table className="table table-striped table-bordered" id="adminpocetnatabela">
-                <thead>
-                <tr>
-                   <th>Osoba</th>
-                   <th>Vrijeme rezervacije</th>
-                   <th>Mjesto polaska</th>
-                   <th>Destinacija</th>
-                   <th>Model aviona</th>
-                   <th>Klasa leta</th>
-                   <th>Cijena</th>
-                </tr>
-                </thead>
-                <tbody>
+       <div style={{ width: "100%" }}>
+          <div className="slideshow">
+             <div className="slideshow-image" style={{ backgroundImage: "url('./images/BYAJ3H.jpg')" }}></div>
+             <div className="slideshow-image" style={{ backgroundImage: "url('./images/istockphoto-183238400-1024x1024.jpg')" }}></div>
+             <div className="slideshow-image" style={{ backgroundImage: "url('./images/istockphoto-1147221668-1024x1024.jpg')" }}></div>
+             <div className="slideshow-image" style={{ backgroundImage: "url('./images/stock-photo-london-uk-march-a-virgin-atlantic-airplane-taxis-on-tarmac-at-heathrow-airport-the-1674617722.jpg')" }}></div>
+          </div>
+
+          <div className="home-container">
+             <div>
+                <h2 className="text-center mt-3 mb-5">Posljednje rezervacije</h2>
+                <table className="table table-striped table-bordered" id="adminpocetnatabela">
+                   <thead>
+                   <tr>
+                      <th>Osoba</th>
+                      <th>Vrijeme rezervacije</th>
+                      <th>Mjesto polaska</th>
+                      <th>Destinacija</th>
+                      <th>Model aviona</th>
+                      <th>Klasa leta</th>
+                      <th>Cijena</th>
+                   </tr>
+                   </thead>
+                   <tbody>
                    {/*<?php*/}
                    {/*$sql = "select u.name, r.time, r.class, f.city_from, f.city_to, a.model, f.price from users u, reservations r, airplanes a, flights f where u.id = r.user_id and a.id = f.airplane_id and r.id not in(select id from cancelled_reservations) and f.id = r.flight_id order by r.time desc limit 3";*/}
                    {/*$result = DB::select(DB::raw($sql));*/}
@@ -111,31 +119,32 @@ function HomeComponent() {
                           </tr>
                       );
                    })}
-                </tbody>
-             </table>
-          </div>
-          <div className="col-xs-3 col-xs-offset-2">
-             <div id="stats">
-                <span className="glyphicon glyphicon-stats"></span>
-                <h3>Statistika rezervacija:</h3>
-                { `Danas: (${reservationsStats.today} - ${reservationsStats.todayWithCanceled})` }<br />
-                { `Ovog mjeseca: (${reservationsStats.month} - ${reservationsStats.monthWithCanceled})` }<br />
-                { `Ove godine: (${reservationsStats.year} - ${reservationsStats.yearWithCanceled})` }
-                {/*<?php*/}
-                {/*$sqlStats1 =  "select count(r.id) as count from reservations r, cancelled_reservations cr where day(r.time) = day(now()) and r.id = cr.id";*/}
-                {/*$sqlStats11 =  "select count(r.id) as count from reservations r where day(r.time) = day(now())";*/}
-                {/*$today1 = ((array)DB::select(DB::raw($sqlStats1))[0])["count"];*/}
-                {/*$today2 = ((array)DB::select(DB::raw($sqlStats11))[0])["count"];*/}
-                {/*$sqlStats2 =  "select count(r.id) as count from reservations r, cancelled_reservations cr where month(r.time) = month(now()) and r.id = cr.id";*/}
-                {/*$sqlStats22 =  "select count(r.id) as count from reservations r where month(r.time) = month(now())";*/}
-                {/*$month1 = ((array)DB::select(DB::raw($sqlStats2))[0])["count"];*/}
-                {/*$month2 = ((array)DB::select(DB::raw($sqlStats22))[0])["count"];*/}
-                {/*$sqlStats3 =  "select count(r.id) as count from reservations r, cancelled_reservations cr where year(r.time) = year(now()) and r.id = cr.id";*/}
-                {/*$sqlStats33 =  "select count(r.id) as count from reservations r where year(r.time) = year(now())";*/}
-                {/*$year1 = ((array)DB::select(DB::raw($sqlStats3))[0])["count"];*/}
-                {/*$year2 = ((array)DB::select(DB::raw($sqlStats33))[0])["count"];*/}
-                {/*echo "Danas: " . ($today2 - $today1) . "<br>Ovog mjeseca: " . ($month2 - $month1) . "<br>Ove godine:" . ($year2 - $year1);*/}
-                {/*?>*/}
+                   </tbody>
+                </table>
+             </div>
+             <div className="col-xs-3 col-xs-offset-2">
+                <div id="stats">
+                   <span className="glyphicon glyphicon-stats"></span>
+                   <h3>Statistika rezervacija:</h3>
+                   { `Danas: (${reservationsStats.today} - ${reservationsStats.todayWithCanceled})` }<br />
+                   { `Ovog mjeseca: (${reservationsStats.month} - ${reservationsStats.monthWithCanceled})` }<br />
+                   { `Ove godine: (${reservationsStats.year} - ${reservationsStats.yearWithCanceled})` }
+                   {/*<?php*/}
+                   {/*$sqlStats1 =  "select count(r.id) as count from reservations r, cancelled_reservations cr where day(r.time) = day(now()) and r.id = cr.id";*/}
+                   {/*$sqlStats11 =  "select count(r.id) as count from reservations r where day(r.time) = day(now())";*/}
+                   {/*$today1 = ((array)DB::select(DB::raw($sqlStats1))[0])["count"];*/}
+                   {/*$today2 = ((array)DB::select(DB::raw($sqlStats11))[0])["count"];*/}
+                   {/*$sqlStats2 =  "select count(r.id) as count from reservations r, cancelled_reservations cr where month(r.time) = month(now()) and r.id = cr.id";*/}
+                   {/*$sqlStats22 =  "select count(r.id) as count from reservations r where month(r.time) = month(now())";*/}
+                   {/*$month1 = ((array)DB::select(DB::raw($sqlStats2))[0])["count"];*/}
+                   {/*$month2 = ((array)DB::select(DB::raw($sqlStats22))[0])["count"];*/}
+                   {/*$sqlStats3 =  "select count(r.id) as count from reservations r, cancelled_reservations cr where year(r.time) = year(now()) and r.id = cr.id";*/}
+                   {/*$sqlStats33 =  "select count(r.id) as count from reservations r where year(r.time) = year(now())";*/}
+                   {/*$year1 = ((array)DB::select(DB::raw($sqlStats3))[0])["count"];*/}
+                   {/*$year2 = ((array)DB::select(DB::raw($sqlStats33))[0])["count"];*/}
+                   {/*echo "Danas: " . ($today2 - $today1) . "<br>Ovog mjeseca: " . ($month2 - $month1) . "<br>Ove godine:" . ($year2 - $year1);*/}
+                   {/*?>*/}
+                </div>
              </div>
           </div>
        </div>
